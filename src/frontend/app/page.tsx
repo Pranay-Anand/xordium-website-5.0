@@ -345,7 +345,7 @@ export default function Home() {
           </p>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
-              href="/events"
+              href="/register"
               className="bg-red-600 px-6 py-3 font-mono text-xs font-bold tracking-[0.2em] uppercase hover:bg-red-500"
             >
               Authenticate & register now →

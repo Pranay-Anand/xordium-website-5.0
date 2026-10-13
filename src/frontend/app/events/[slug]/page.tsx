@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getRegistrationHref } from "@/data/events";
 import { events, getEvent } from "@/lib/events";
 
 export function generateStaticParams() {
@@ -66,7 +67,7 @@ export default async function EventDetailPage({
           </dl>
           <div className="mt-5 flex flex-col gap-2 sm:flex-row">
             <Link
-              href="/support"
+              href={getRegistrationHref(event.slug)}
               className="bg-red-600 px-5 py-2.5 text-center font-mono text-[11px] font-bold tracking-[0.2em] uppercase hover:bg-red-500"
             >
               {event.cta} // Register →
