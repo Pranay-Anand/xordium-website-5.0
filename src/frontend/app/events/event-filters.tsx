@@ -74,8 +74,8 @@ export default function EventFilters() {
 
             const Poster = (
               <div className="group relative w-full lg:w-1/2 shrink-0">
-                {/* 5:4 aspect ratio wrapper for 1350×1080 images */}
-                <div className="relative w-full" style={{ paddingBottom: "80%" }}>
+                {/* 4:5 aspect ratio wrapper for portrait 1080×1350 images */}
+                <div className="relative w-full" style={{ paddingBottom: "125%" }}>
                   <Image
                     src={e.image}
                     alt={e.title}
