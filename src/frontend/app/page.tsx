@@ -3,7 +3,7 @@ import Link from "next/link";
 import Countdown from "@/components/countdown";
 import EventCard from "@/components/event-card";
 import SectionHeading from "@/components/section-heading";
-import { FESTIVAL_START, getFeaturedEvents } from "@/lib/events";
+import { REGISTRATION_DEADLINE, getFeaturedEvents } from "@/lib/events";
 
 const stats = [
   { value: "$15,000+", label: "Prize pool & bounty contracts" },
@@ -120,7 +120,7 @@ export default function Home() {
             Main Hub.
           </p>
           <div className="mx-auto mt-6 max-w-xl">
-            <Countdown target={FESTIVAL_START} />
+            <Countdown target={REGISTRATION_DEADLINE} caption="Registration closes in" />
           </div>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link

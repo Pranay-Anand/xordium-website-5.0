@@ -27,6 +27,9 @@ export interface FestEvent {
 
 export const FESTIVAL_START = new Date("2026-12-18T09:00:00+05:30");
 
+// Registration deadline: 23 Oct 2026, 00:00 IST (UTC+5:30).
+export const REGISTRATION_DEADLINE = new Date("2026-10-23T00:00:00+05:30");
+
 export const TOTAL_PRIZE_POOL = "₹4,85,000";
 
 export const events: FestEvent[] = [

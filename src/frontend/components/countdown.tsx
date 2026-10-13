@@ -20,7 +20,13 @@ const cells: { key: "days" | "hours" | "minutes" | "seconds"; label: string }[] 
   { key: "seconds", label: "Seconds" },
 ];
 
-export default function Countdown({ target }: { target: Date }) {
+export default function Countdown({
+  target,
+  caption,
+}: {
+  target: Date;
+  caption?: string;
+}) {
   const [parts, setParts] = useState(() => getParts(target));
 
   useEffect(() => {
@@ -43,7 +49,9 @@ export default function Countdown({ target }: { target: Date }) {
         ))}
       </div>
       <p className="mt-2 text-center font-mono text-[10px] tracking-[0.2em] text-white/40 uppercase">
-        {parts.live ? "Gateway status: live" : "System launch synchronization clock"}
+        {parts.live
+          ? "Registration gateway: closed"
+          : (caption ?? "System launch synchronization clock")}
       </p>
     </div>
   );
