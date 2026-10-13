@@ -30,35 +30,37 @@ export default function SupportForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-8 w-full max-w-md">
-      <label className="block text-sm text-white/70">
-        Email
+    <form onSubmit={handleSubmit} className="w-full max-w-md">
+      <label className="block font-mono text-xs text-white/70">
+        EMAIL
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 block w-full rounded border border-white/20 bg-white/5 p-2 text-white"
+          placeholder="squad-lead@college.edu"
+          className="mt-1 block w-full rounded border border-white/20 bg-white/5 p-2.5 text-white placeholder:text-white/30"
         />
       </label>
-      <label className="mt-4 block text-sm text-white/70">
-        What do you need help with? (min 10 characters)
+      <label className="mt-4 block font-mono text-xs text-white/70">
+        TRANSMISSION — MIN 10 CHARACTERS
         <textarea
           required
           value={contents}
           onChange={(e) => setContents(e.target.value)}
-          className="mt-1 block w-full rounded border border-white/20 bg-white/5 p-2 text-white"
+          placeholder="Describe the fault, bracket dispute, or hardware query..."
+          className="mt-1 block w-full rounded border border-white/20 bg-white/5 p-2.5 text-white placeholder:text-white/30"
           rows={4}
         />
       </label>
       <button
         type="submit"
-        className="mt-4 rounded bg-white px-4 py-2 font-semibold text-[#121318]"
+        className="mt-4 bg-red-600 px-5 py-2.5 font-mono text-[11px] font-bold tracking-[0.2em] text-white uppercase hover:bg-red-500"
       >
-        Submit ticket
+        Dispatch ticket →
       </button>
       {status !== null ? (
-        <p className="mt-2 text-sm text-white/70">{status}</p>
+        <p className="mt-2 font-mono text-xs text-white/70">{status}</p>
       ) : null}
     </form>
   );
