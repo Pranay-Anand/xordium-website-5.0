@@ -14,7 +14,7 @@ import {
   safeServerError,
 } from "@/backend/lib/api";
 
-// Roll number format, e.g. BTECH/150101/22
+// Roll number format, e.g. BTECH/15xxx/2x
 const ROLL_NO_PATTERN = /^BTECH\/\d+\/\d+$/i;
 const USERNAME_PATTERN = /^[a-z0-9_.]{3,32}$/;
 

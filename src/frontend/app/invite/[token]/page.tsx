@@ -167,7 +167,7 @@ export default function AcceptInvitePage() {
                 maxLength={100}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Jane Doe"
+                placeholder="First Last Name"
                 className={inputClass}
               />
             </label>
