@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { events, getCategories } from "@/lib/events";
 import { getRegistrationHref } from "@/data/events";
+import MarkdownText from "@/components/markdown-text";
 
 export default function EventFilters() {
   const [query, setQuery] = useState("");
@@ -66,16 +67,15 @@ export default function EventFilters() {
           No protocols match your query. Clear search or contact support.
         </p>
       ) : (
-        <div className="mt-6 flex flex-col divide-y divide-white/10 border border-white/10">
+        <div className="mt-6 flex flex-col gap-8">
           {filtered.map((e, i) => {
             // 1-indexed: odd events (1,3,5…) → description left, poster right
             //            even events (2,4,6…) → poster left, description right
             const posterOnLeft = (i + 1) % 2 === 0;
 
             const Poster = (
-              <div className="group relative w-full lg:w-1/2 shrink-0">
-                {/* 4:5 aspect ratio wrapper for portrait 1080×1350 images */}
-                <div className="relative w-full" style={{ paddingBottom: "125%" }}>
+              <div className="group relative h-[300px] w-full shrink-0 lg:h-full lg:w-1/2">
+                <div className="relative h-full w-full overflow-hidden">
                   <Image
                     src={e.image}
                     alt={e.title}
@@ -121,9 +121,9 @@ export default function EventFilters() {
                   {e.title}
                 </h3>
 
-                <p className="mt-3 font-mono text-xs leading-relaxed text-white/60">
+                <MarkdownText className="mt-3 font-mono text-xs leading-relaxed text-white/60">
                   {e.description}
-                </p>
+                </MarkdownText>
 
                 <dl className="mt-5 space-y-2 border-t border-white/10 pt-5 font-mono text-[11px]">
                   <div className="flex justify-between gap-4">
@@ -173,7 +173,7 @@ export default function EventFilters() {
             return (
               <div
                 key={e.slug}
-                className="flex flex-col lg:flex-row lg:items-stretch"
+                className="flex flex-col overflow-hidden border border-white/10 lg:h-[500px] lg:flex-row lg:items-stretch"
               >
                 {posterOnLeft ? (
                   <>

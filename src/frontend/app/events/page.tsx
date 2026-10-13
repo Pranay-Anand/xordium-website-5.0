@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getRegistrationHref } from "@/data/events";
 import EventFilters from "./event-filters";
 import { TOTAL_PRIZE_POOL, getEvent } from "@/lib/events";
+import MarkdownText from "@/components/markdown-text";
 
 export default function EventsPage() {
   const flagship = getEvent("synapse-protocol")!;
@@ -51,9 +52,9 @@ export default function EventsPage() {
               <h2 className="mt-2 font-display text-3xl leading-tight font-black uppercase sm:text-4xl">
                 {flagship.title}
               </h2>
-              <p className="mt-3 font-mono text-xs leading-relaxed text-white/60">
+              <MarkdownText className="mt-3 font-mono text-xs leading-relaxed text-white/60">
                 {flagship.description}
-              </p>
+              </MarkdownText>
               <div className="mt-4 rounded border border-white/10 p-4 font-mono text-[11px]">
                 <p className="tracking-[0.2em] text-white/45 uppercase">
                   Official evaluation matrix // Weighting

@@ -8,6 +8,7 @@ import {
   updateEvent,
   type AdminEvent,
 } from "@/lib/admin-api";
+import { stripMarkdown } from "@/lib/markdown";
 
 // ── WebP conversion via Canvas (client-side, no server deps) ────────────────
 function convertToWebP(file: File): Promise<Blob> {
@@ -237,8 +238,12 @@ export default function EventsPage() {
                   onChange={(e) => setEditDescription(e.target.value)}
                   rows={5}
                   className="block w-full rounded border border-white/20 bg-white/5 p-3 font-mono text-xs text-white placeholder:text-white/30 focus:border-red-500 focus:outline-none resize-y"
-                  placeholder="Event description..."
+                  placeholder="Event description (Markdown supported)..."
                 />
+                <p className="mt-1.5 font-mono text-[10px] leading-relaxed text-white/35">
+                  Markdown supported — **bold**, *italic*, - lists, &gt; quotes,
+                  [links](https://…). Line breaks &amp; emoji are preserved as typed.
+                </p>
               </div>
 
               {/* Poster upload */}
@@ -405,7 +410,7 @@ export default function EventsPage() {
 
               {event.description && (
                 <p className="font-mono text-[11px] text-white/60 line-clamp-2 mb-3">
-                  {event.description.slice(0, 150)}…
+                  {stripMarkdown(event.description).slice(0, 150)}…
                 </p>
               )}
 

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getRegistrationHref } from "@/data/events";
 import type { FestEvent } from "@/lib/events";
+import MarkdownText from "@/components/markdown-text";
 
 export default function EventCard({ event }: { event: FestEvent }) {
   return (
@@ -25,9 +26,9 @@ export default function EventCard({ event }: { event: FestEvent }) {
         <h3 className="font-display text-lg leading-tight font-extrabold text-white uppercase">
           {event.title}
         </h3>
-        <p className="mt-2 line-clamp-3 font-mono text-xs leading-relaxed text-white/55">
+        <MarkdownText className="mt-2 line-clamp-3 font-mono text-xs leading-relaxed text-white/55">
           {event.description}
-        </p>
+        </MarkdownText>
         <dl className="mt-3 space-y-1 border-t border-white/10 pt-3 font-mono text-[11px]">
           <div className="flex justify-between gap-2">
             <dt className="text-white/40 uppercase">Venue</dt>

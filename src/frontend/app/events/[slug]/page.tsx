@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getRegistrationHref } from "@/data/events";
 import { events, getEvent } from "@/lib/events";
+import MarkdownText from "@/components/markdown-text";
 
 export function generateStaticParams() {
   return events.map((e) => ({ slug: e.slug }));
@@ -46,9 +47,9 @@ export default async function EventDetailPage({
           <h1 className="mt-2 font-display text-4xl leading-tight font-black uppercase">
             {event.title}
           </h1>
-          <p className="mt-3 font-mono text-xs leading-relaxed text-white/60">
+          <MarkdownText className="mt-3 font-mono text-xs leading-relaxed text-white/60">
             {event.description}
-          </p>
+          </MarkdownText>
           <dl className="mt-5 space-y-2 rounded border border-white/10 bg-[#101218] p-4 font-mono text-xs">
             {[
               ["Prize pool", event.prizePool],

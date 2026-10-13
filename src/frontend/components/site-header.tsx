@@ -19,9 +19,6 @@ export default function SiteHeader() {
           <span className="font-display text-sm font-black text-white">
             5.0
           </span>
-          <span className="hidden font-mono text-[10px] tracking-[0.25em] text-white/40 uppercase sm:inline">
-            // BIT Arena
-          </span>
         </Link>
         <nav className="flex items-center gap-1 sm:gap-2">
           {links.map((l) => (
