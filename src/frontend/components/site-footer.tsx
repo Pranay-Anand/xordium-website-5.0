@@ -32,8 +32,8 @@ export default function SiteFooter() {
         </div>
         <div className="font-mono text-[11px]">
           <p className="tracking-[0.2em] text-white/40 uppercase">Comms</p>
-          <p className="mt-2 text-white/70">operations@xordium.bit.in</p>
-          <p className="text-white/70">BIT Mesra, Ranchi 835215</p>
+          <p className="mt-2 text-white/70">ignite@bitmesra.ac.in</p>
+          <p className="text-white/70">Birla Institute of Technology, Patna 800014</p>
         </div>
       </div>
       <div className="border-t border-white/10 py-3 text-center font-mono text-[10px] tracking-[0.25em] text-white/35 uppercase">

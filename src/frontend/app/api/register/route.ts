@@ -1,5 +1,6 @@
 import { prisma } from "@/backend/lib/prisma";
 import { checkPersistentRateLimit } from "@/backend/lib/rateLimit";
+import { renderRegistrationConfirmationEmail, sendEmail } from "@/backend/lib/email";
 import {
   isCrossOriginRequest,
   requestIdentifier,
@@ -224,9 +225,37 @@ export async function POST(request: Request) {
         isExternalTeam: submission.isExternalTeam,
       },
     });
-
-    return Response.json({ success: true });
   } catch (error) {
     return safeServerError("Failed to store registration:", error);
   }
+
+  // Best-effort congratulations email to the team leader only.
+  // A delivery problem must never fail an already-stored registration.
+  try {
+    const { subject, html, text } = renderRegistrationConfirmationEmail({
+      eventName: submission.eventName,
+      fullName: submission.fullName,
+      email: submission.email,
+      phone: submission.phone,
+      collegeName: submission.collegeName,
+      branch: submission.branch,
+      year: submission.year,
+      rollNumber: submission.rollNumber,
+      teamName: submission.teamName,
+      teamMembers: submission.teamMembers,
+      isExternalTeam: submission.isExternalTeam,
+      registeredAt: new Date(),
+    });
+    const sent = await sendEmail({ to: submission.email, subject, html, text });
+    if (!sent.ok) {
+      console.warn("Registration confirmation email failed:", sent.error);
+    }
+  } catch (error) {
+    console.warn(
+      "Registration confirmation email error:",
+      error instanceof Error ? error.message : "unknown",
+    );
+  }
+
+  return Response.json({ success: true });
 }
