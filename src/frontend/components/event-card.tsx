@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getRegistrationHref } from "@/data/events";
 import type { FestEvent } from "@/lib/events";
 
 export default function EventCard({ event }: { event: FestEvent }) {
@@ -47,7 +48,7 @@ export default function EventCard({ event }: { event: FestEvent }) {
             </div>
           </div>
           <Link
-            href={`/events/${event.slug}`}
+            href={getRegistrationHref(event.slug)}
             className="bg-red-600 px-4 py-2 font-mono text-[11px] font-bold tracking-[0.15em] text-white uppercase transition hover:bg-red-500"
           >
             {event.cta} →

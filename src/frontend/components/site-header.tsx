@@ -34,7 +34,7 @@ export default function SiteHeader() {
             </Link>
           ))}
           <Link
-            href="/events"
+            href="/register"
             className="ml-1 hidden bg-red-600 px-3 py-1.5 font-mono text-[11px] font-bold tracking-[0.15em] text-white uppercase hover:bg-red-500 sm:inline"
           >
             Register →

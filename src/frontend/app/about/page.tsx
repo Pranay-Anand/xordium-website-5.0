@@ -235,7 +235,7 @@ export default function AboutPage() {
           </div>
           <div className="flex gap-2">
             <Link
-              href="/events"
+              href="/register"
               className="bg-red-600 px-5 py-2.5 font-mono text-[11px] font-bold tracking-[0.2em] uppercase hover:bg-red-500"
             >
               Register delegate →

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getRegistrationHref } from "@/data/events";
 import EventFilters from "./event-filters";
 import { TOTAL_PRIZE_POOL, getEvent } from "@/lib/events";
 
@@ -71,7 +72,7 @@ export default function EventsPage() {
               </div>
               <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                 <Link
-                  href={`/events/${flagship.slug}`}
+                  href={getRegistrationHref(flagship.slug)}
                   className="bg-red-600 px-5 py-2.5 text-center font-mono text-[11px] font-bold tracking-[0.2em] uppercase hover:bg-red-500"
                 >
                   Submit deck // Squad registration →
