@@ -13,7 +13,6 @@ import {
   safeServerError,
 } from "@/backend/lib/api";
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Used to equalize timing when the account does not exist
 const DUMMY_PASSWORD_HASH = "$2b$10$5HPkhMnvfP7vmjg/cGH22eUxYETRT46rbWNbpJR.qIMMXEw/oYzvO";
 
@@ -36,10 +35,11 @@ export async function POST(request: Request) {
     }
 
     const body = await readJsonObject(request, 2_048);
-    const email = requiredText(body.email, "Email", 254).toLowerCase();
-    const emailKey = createHash("sha256").update(email).digest("hex");
+    // Sign-in accepts either an email address or a username.
+    const identifier = requiredText(body.email, "Email or username", 254).toLowerCase();
+    const identifierKey = createHash("sha256").update(identifier).digest("hex");
     const accountLimit = await checkPersistentRateLimit(
-      `login-account:${emailKey}`,
+      `login-account:${identifierKey}`,
       10,
       15 * 60_000
     );
@@ -50,13 +50,11 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!EMAIL_PATTERN.test(email)) {
-      return NextResponse.json({ error: "Invalid credentials." }, { status: 401 });
-    }
-
     const password = requiredPassword(body.password);
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findFirst({
+      where: { OR: [{ email: identifier }, { username: identifier }] },
+    });
     // Verify against a dummy hash when the user is missing to avoid timing leaks
     const valid = await verifyPassword(password, user?.password ?? DUMMY_PASSWORD_HASH);
     if (!valid || !user || !user.isActive || user.mustSetPassword || !isAdminRole(user.role)) {
@@ -73,7 +71,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      user: { id: user.id, email: user.email, name: user.name, role: user.role },
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        name: user.name,
+        role: user.role,
+      },
     });
   } catch (error) {
     const inputResponse = inputErrorResponse(error);

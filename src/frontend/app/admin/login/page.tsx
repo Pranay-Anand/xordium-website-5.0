@@ -45,13 +45,13 @@ export default function AdminLogin() {
           className="border border-white/10 bg-white/5 p-6 rounded"
         >
           <label className="block font-mono text-xs text-white/70 uppercase tracking-[0.15em]">
-            EMAIL
+            EMAIL OR USERNAME
             <input
-              type="email"
+              type="text"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@xordium.com"
+              placeholder="admin@xordium.com or username"
               className="mt-1 block w-full rounded border border-white/20 bg-white/5 p-2.5 text-white placeholder:text-white/30 focus:border-red-500 focus:outline-none"
             />
           </label>

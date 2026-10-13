@@ -11,9 +11,29 @@ const USER_KEY = "xordium_admin_user";
 export interface AdminUser {
   id: string;
   email: string;
+  username?: string | null;
+  rollNo?: string | null;
   name: string | null;
   role: "OWNER" | "ADMIN" | "MODERATOR";
   createdAt?: string;
+}
+
+export interface Invitation {
+  id: string;
+  email: string;
+  role: "ADMIN" | "MODERATOR";
+  expiresAt: string;
+  acceptedAt?: string | null;
+  createdAt: string;
+  invitedBy?: { email: string } | null;
+}
+
+export interface CreatedInvitation {
+  success: boolean;
+  invitation: { id: string; email: string; role: string; expiresAt: string };
+  inviteUrl: string;
+  emailSent: boolean;
+  emailError?: string;
 }
 
 // ==================== SESSION MANAGEMENT ====================
@@ -146,13 +166,37 @@ export async function fetchUsers(): Promise<AdminUser[]> {
   return apiRequest<AdminUser[]>("/admin/users");
 }
 
-export async function createUser(input: {
+// ==================== INVITATIONS API (creates accounts via email) ====================
+
+export async function fetchInvitations(): Promise<Invitation[]> {
+  return apiRequest<Invitation[]>("/admin/invitations");
+}
+
+export async function sendInvitation(input: {
   email: string;
-  name: string;
-  password: string;
   role: "ADMIN" | "MODERATOR";
-}): Promise<{ message: string; user: AdminUser }> {
-  return apiRequest<{ message: string; user: AdminUser }>("/admin/users", {
+}): Promise<CreatedInvitation> {
+  return apiRequest<CreatedInvitation>("/admin/invitations", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+// ---- Public invitation endpoints (no session required) ----
+
+export async function getInvitation(
+  token: string
+): Promise<{ email: string; role: string; expiresAt: string }> {
+  return apiRequest<{ email: string; role: string; expiresAt: string }>(
+    `/invitations/${encodeURIComponent(token)}`
+  );
+}
+
+export async function acceptInvitation(
+  token: string,
+  input: { name: string; rollNo: string; username: string; password: string }
+): Promise<{ success: boolean; user: { email: string; username: string; role: string } }> {
+  return apiRequest(`/invitations/${encodeURIComponent(token)}/accept`, {
     method: "POST",
     body: JSON.stringify(input),
   });

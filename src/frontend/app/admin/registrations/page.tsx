@@ -94,9 +94,15 @@ export default function RegistrationsPage() {
             onChange={(e) => setFilterEvent(e.target.value)}
             className="mt-1 block w-full max-w-md rounded border border-white/20 bg-white/5 p-2.5 text-white focus:border-red-500 focus:outline-none"
           >
-            <option value="">All Events</option>
+            <option value="" className="bg-neutral-900 text-white">
+              All Events
+            </option>
             {events.map((event) => (
-              <option key={event.id} value={event.id}>
+              <option
+                key={event.id}
+                value={event.id}
+                className="bg-neutral-900 text-white"
+              >
                 {event.title}
               </option>
             ))}

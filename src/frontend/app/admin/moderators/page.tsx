@@ -131,9 +131,11 @@ export default function ModeratorsPage() {
               onChange={(e) => setSelectedUserId(e.target.value)}
               className="mt-1 block w-full rounded border border-white/20 bg-white/5 p-2.5 text-white focus:border-red-500 focus:outline-none"
             >
-              <option value="">Choose a user...</option>
+              <option value="" className="bg-neutral-900 text-white">
+                Choose a user...
+              </option>
               {promotableUsers.map((u) => (
-                <option key={u.id} value={u.id}>
+                <option key={u.id} value={u.id} className="bg-neutral-900 text-white">
                   {u.email} ({u.role})
                 </option>
               ))}
