@@ -5,10 +5,11 @@ const nextConfig: NextConfig = {
     // Read backend URL from environment; fall back to localhost for development
     const backendUrl = process.env.BACKEND_URL || "http://localhost:4000";
 
+    // Proxy every API call to the Express backend
     return [
       {
-        source: "/api/support",
-        destination: `${backendUrl}/api/support`,
+        source: "/api/:path*",
+        destination: `${backendUrl}/api/:path*`,
       },
     ];
   },

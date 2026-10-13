@@ -5,6 +5,7 @@ const links = [
   { href: "/events", label: "Events" },
   { href: "/about", label: "About" },
   { href: "/support", label: "Support" },
+  { href: "/admin", label: "Admin" },
 ];
 
 export default function SiteHeader() {
