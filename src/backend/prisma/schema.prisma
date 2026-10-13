@@ -1,0 +1,65 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  name            String
+  password        String
+  role            String   @default("MODERATOR")
+  isActive        Boolean  @default(true)
+  mustSetPassword Boolean  @default(false)
+  authVersion     Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model AuthRateLimit {
+  key             String   @id
+  windowStartedAt DateTime
+  count           Int
+  updatedAt       DateTime @updatedAt
+
+  @@index([windowStartedAt])
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  tag         String
+  title       String
+  category    String
+  description String
+  image       String
+  prizePool   String
+  venue       String
+  format      String
+  schedule    String
+  teamSize    String?
+  cta         String
+  featured    Boolean  @default(false)
+  posterUrl   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  registrations Registration[]
+}
+
+model Registration {
+  id        String   @id @default(uuid())
+  email     String
+  name      String?
+  createdAt DateTime @default(now())
+
+  eventId String
+  event   Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+  @@index([email])
+}
