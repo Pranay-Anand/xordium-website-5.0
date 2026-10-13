@@ -39,6 +39,28 @@ model Invitation {
   @@index([expiresAt])
 }
 
+model EventRegistration {
+  id            String   @id @default(uuid())
+  eventId       String
+  eventName     String
+  fullName      String
+  email         String
+  phone         String
+  collegeName   String
+  branch        String
+  year          String
+  rollNumber    String
+  teamName      String   @default("")
+  teamMembers   Json     @default("[]")
+  // Hackathon team declared they are NOT from BIT (waives @bitmesra.ac.in).
+  isExternalTeam Boolean @default(false)
+  createdAt     DateTime @default(now())
+
+  @@index([eventId])
+  @@index([email])
+  @@index([createdAt])
+}
+
 model AuthRateLimit {
   key             String   @id
   windowStartedAt DateTime

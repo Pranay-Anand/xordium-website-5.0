@@ -98,6 +98,30 @@ export const registrationEvents: RegistrationEvent[] = [
   },
 ];
 
+// Participants must register with their institutional email...
+export const BIT_EMAIL_DOMAIN = "@bitmesra.ac.in";
+
+// ...except hackathon teams that declare they are not from BIT.
+export const HACKATHON_EVENT_ID = "synapse-protocol";
+
+export function isHackathonEvent(eventId: string): boolean {
+  return eventId === HACKATHON_EVENT_ID;
+}
+
+// Whether a registration must use @bitmesra.ac.in emails.
+// Only a hackathon team marked as external is exempt.
+export function requiresBitEmail(
+  eventId: string,
+  isExternalTeam: boolean,
+): boolean {
+  if (eventId === HACKATHON_EVENT_ID && isExternalTeam) return false;
+  return true;
+}
+
+export function isBitEmail(email: string): boolean {
+  return email.trim().toLowerCase().endsWith(BIT_EMAIL_DOMAIN);
+}
+
 export function getRegistrationHref(eventId: string): string {
   const isRegistrationEvent = registrationEvents.some(
     (event) => event.id === eventId,

@@ -2,7 +2,7 @@
 
 import { useState, type SyntheticEvent } from "react";
 import Link from "next/link";
-import { registrationEvents } from "@/data/events";
+import { registrationEvents, HACKATHON_EVENT_ID, requiresBitEmail, isBitEmail, BIT_EMAIL_DOMAIN } from "@/data/events";
 import type {
   Branch,
   RegistrationSubmission,
@@ -56,6 +56,8 @@ export default function RegistrationForm({ initialEventId }: Props) {
       : [],
   );
   const [acceptedPrivacyPolicy, setAcceptedPrivacyPolicy] = useState(false);
+  // Hackathon only: team declared they are not from BIT (waives @bitmesra.ac.in).
+  const [isExternalTeam, setIsExternalTeam] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,6 +70,8 @@ export default function RegistrationForm({ initialEventId }: Props) {
     registrationEvents[0];
   const hasTeamFields = selectedEvent.allowTeamMembers;
   const totalTeamSize = 1 + teamMembers.length;
+  const showExternalToggle = selectedEvent.id === HACKATHON_EVENT_ID;
+  const bitRequired = requiresBitEmail(selectedEvent.id, isExternalTeam);
 
   function changeEvent(newEventId: string) {
     const newEvent = registrationEvents.find((event) => event.id === newEventId);
@@ -80,6 +84,7 @@ export default function RegistrationForm({ initialEventId }: Props) {
         : [],
     );
     setTeamName("");
+    setIsExternalTeam(false);
     setErrors({});
   }
 
@@ -115,6 +120,8 @@ export default function RegistrationForm({ initialEventId }: Props) {
 
     if (email.trim() && !emailPattern.test(email.trim())) {
       nextErrors.email = "Enter a valid email address.";
+    } else if (email.trim() && bitRequired && !isBitEmail(email)) {
+      nextErrors.email = `Use your ${BIT_EMAIL_DOMAIN} email address.`;
     }
     if (phone.trim() && !phonePattern.test(phone.trim())) {
       nextErrors.phone = "Enter a valid 10-digit phone number.";
@@ -148,6 +155,8 @@ export default function RegistrationForm({ initialEventId }: Props) {
           nextErrors[`${prefix}.email`] = "Enter this member's email.";
         } else if (!emailPattern.test(member.email.trim())) {
           nextErrors[`${prefix}.email`] = "Enter a valid email address.";
+        } else if (bitRequired && !isBitEmail(member.email)) {
+          nextErrors[`${prefix}.email`] = `Use a ${BIT_EMAIL_DOMAIN} email address.`;
         }
         if (!member.branch) nextErrors[`${prefix}.branch`] = "Select this member's branch.";
         if (!member.year.trim()) nextErrors[`${prefix}.year`] = "Enter this member's year of study.";
@@ -201,6 +210,7 @@ export default function RegistrationForm({ initialEventId }: Props) {
             phone: member.phone.trim(),
           }))
         : [],
+      isExternalTeam,
       acceptedPrivacyPolicy,
     };
 
@@ -319,7 +329,7 @@ export default function RegistrationForm({ initialEventId }: Props) {
           />
           <TextField
             id="email"
-            label="Email"
+            label={bitRequired ? `Email (${BIT_EMAIL_DOMAIN})` : "Email"}
             type="email"
             value={email}
             error={errors.email}
@@ -382,6 +392,28 @@ export default function RegistrationForm({ initialEventId }: Props) {
             required
           />
         </div>
+
+        {showExternalToggle ? (
+          <label className="mt-4 flex items-start gap-3 border border-cyan-300/30 bg-cyan-300/5 p-3">
+            <input
+              type="checkbox"
+              checked={isExternalTeam}
+              onChange={(event) => setIsExternalTeam(event.target.checked)}
+              className="mt-0.5 size-4 shrink-0 accent-cyan-400"
+            />
+            <span className="font-mono text-xs leading-relaxed text-white/70">
+              <span className="block text-[11px] font-bold uppercase tracking-[0.15em] text-white">
+                Our team is not from Birla Institute of Technology (BIT)
+              </span>
+              <span className="mt-1 block text-white/50">
+                Inter-college / open team? Tick this and the{" "}
+                <span className="text-cyan-300">{BIT_EMAIL_DOMAIN}</span> email
+                requirement is waived for your whole team. BIT teams must leave
+                this unchecked and use {BIT_EMAIL_DOMAIN} emails.
+              </span>
+            </span>
+          </label>
+        ) : null}
       </section>
 
       {hasTeamFields ? (

@@ -1,4 +1,16 @@
-import { registrationEvents } from "@/data/events";
+import { prisma } from "@/backend/lib/prisma";
+import { checkPersistentRateLimit } from "@/backend/lib/rateLimit";
+import {
+  isCrossOriginRequest,
+  requestIdentifier,
+  safeServerError,
+} from "@/backend/lib/api";
+import {
+  HACKATHON_EVENT_ID,
+  isBitEmail,
+  registrationEvents,
+  requiresBitEmail,
+} from "@/data/events";
 import type {
   Branch,
   RegistrationSubmission,
@@ -29,15 +41,26 @@ function isBranch(value: unknown): value is Branch {
   return typeof value === "string" && branches.includes(value as Branch);
 }
 
-function validateSubmission(value: unknown): RegistrationSubmission | null {
-  if (!isObject(value)) return null;
+type ValidationResult =
+  | { submission: RegistrationSubmission }
+  | { error: string };
 
-  const event = registrationEvents.find(
-    (item) => item.id === value.eventId,
-  );
+function validateSubmission(value: unknown): ValidationResult {
+  if (!isObject(value)) {
+    return { error: "The registration data is not valid." };
+  }
+
+  const event = registrationEvents.find((item) => item.id === value.eventId);
+  if (!event || value.eventName !== event.name) {
+    return { error: "Choose a valid event to register for." };
+  }
+
+  // Only the hackathon carries an external-team declaration.
+  const isExternalTeam =
+    event.id === HACKATHON_EVENT_ID && value.isExternalTeam === true;
+  const bitRequired = requiresBitEmail(event.id, isExternalTeam);
+
   if (
-    !event ||
-    value.eventName !== event.name ||
     !isText(value.fullName) ||
     !isText(value.email) ||
     !isText(value.phone) ||
@@ -47,7 +70,7 @@ function validateSubmission(value: unknown): RegistrationSubmission | null {
     !isText(value.rollNumber) ||
     value.acceptedPrivacyPolicy !== true
   ) {
-    return null;
+    return { error: "Some registration details are missing or invalid." };
   }
 
   const fullName = value.fullName.trim();
@@ -57,7 +80,16 @@ function validateSubmission(value: unknown): RegistrationSubmission | null {
   const year = value.year.trim();
   const rollNumber = value.rollNumber.trim();
 
-  if (!emailPattern.test(email) || !phonePattern.test(phone)) return null;
+  if (!emailPattern.test(email) || !phonePattern.test(phone)) {
+    return { error: "Enter a valid email address and 10-digit phone number." };
+  }
+  if (bitRequired && !isBitEmail(email)) {
+    return {
+      error: `Registrations require a college email ending in @bitmesra.ac.in.`,
+    };
+  }
+
+  let teamMembers: RegistrationTeamMember[] = [];
 
   if (!event.allowTeamMembers) {
     if (
@@ -65,10 +97,62 @@ function validateSubmission(value: unknown): RegistrationSubmission | null {
       !Array.isArray(value.teamMembers) ||
       value.teamMembers.length > 0
     ) {
-      return null;
+      return { error: "This event does not accept team members." };
+    }
+  } else {
+    // The leader is part of the roster even though they are not in this array.
+    if (
+      !isText(value.teamName) ||
+      !Array.isArray(value.teamMembers) ||
+      value.teamMembers.length + 1 < event.minTeamSize ||
+      value.teamMembers.length + 1 > event.maxTeamSize
+    ) {
+      return {
+        error: `Teams for this event need ${event.minTeamSize}–${event.maxTeamSize} people.`,
+      };
     }
 
-    return {
+    for (const memberValue of value.teamMembers) {
+      if (
+        !isObject(memberValue) ||
+        !isText(memberValue.name) ||
+        !isText(memberValue.email) ||
+        !isBranch(memberValue.branch) ||
+        !isText(memberValue.year) ||
+        !isText(memberValue.phone)
+      ) {
+        return { error: "One of your team members is missing details." };
+      }
+
+      const memberEmail = memberValue.email.trim();
+      if (!emailPattern.test(memberEmail) || !phonePattern.test(memberValue.phone.trim())) {
+        return { error: "One of your team members has an invalid email or phone." };
+      }
+      if (bitRequired && !isBitEmail(memberEmail)) {
+        return {
+          error: `Every team member needs a college email ending in @bitmesra.ac.in.`,
+        };
+      }
+
+      teamMembers.push({
+        name: memberValue.name.trim(),
+        email: memberEmail,
+        branch: memberValue.branch,
+        year: memberValue.year.trim(),
+        phone: memberValue.phone.trim(),
+      });
+    }
+
+    const allEmails = [email, ...teamMembers.map((member) => member.email)].map(
+      (personEmail) => personEmail.toLowerCase(),
+    );
+    if (new Set(allEmails).size !== allEmails.length) {
+      return { error: "Each person on the team must use a different email." };
+    }
+  }
+
+  return {
+    submission: {
       eventId: event.id,
       eventName: event.name,
       fullName,
@@ -78,70 +162,31 @@ function validateSubmission(value: unknown): RegistrationSubmission | null {
       branch: value.branch,
       year,
       rollNumber,
-      teamName: "",
-      teamMembers: [],
+      teamName: event.allowTeamMembers ? value.teamName.trim() : "",
+      teamMembers,
+      isExternalTeam,
       acceptedPrivacyPolicy: true,
-    };
-  }
-
-  // The leader is part of the roster even though they are not in this array.
-  if (
-    !isText(value.teamName) ||
-    !Array.isArray(value.teamMembers) ||
-    value.teamMembers.length + 1 < event.minTeamSize ||
-    value.teamMembers.length + 1 > event.maxTeamSize
-  ) {
-    return null;
-  }
-
-  const teamMembers: RegistrationTeamMember[] = [];
-  for (const memberValue of value.teamMembers) {
-    if (
-      !isObject(memberValue) ||
-      !isText(memberValue.name) ||
-      !isText(memberValue.email) ||
-      !isBranch(memberValue.branch) ||
-      !isText(memberValue.year) ||
-      !isText(memberValue.phone)
-    ) {
-      return null;
-    }
-
-    const member = {
-      name: memberValue.name.trim(),
-      email: memberValue.email.trim(),
-      branch: memberValue.branch,
-      year: memberValue.year.trim(),
-      phone: memberValue.phone.trim(),
-    };
-    if (!emailPattern.test(member.email) || !phonePattern.test(member.phone)) {
-      return null;
-    }
-    teamMembers.push(member);
-  }
-
-  const allEmails = [email, ...teamMembers.map((member) => member.email)].map(
-    (personEmail) => personEmail.toLowerCase(),
-  );
-  if (new Set(allEmails).size !== allEmails.length) return null;
-
-  return {
-    eventId: event.id,
-    eventName: event.name,
-    fullName,
-    email,
-    phone,
-    collegeName,
-    branch: value.branch,
-    year,
-    rollNumber,
-    teamName: value.teamName.trim(),
-    teamMembers,
-    acceptedPrivacyPolicy: true,
+    },
   };
 }
 
 export async function POST(request: Request) {
+  if (isCrossOriginRequest(request)) {
+    return Response.json({ success: false, error: "Forbidden" }, { status: 403 });
+  }
+
+  const rate = await checkPersistentRateLimit(
+    `register:${requestIdentifier(request)}`,
+    20,
+    60 * 60_000,
+  ).catch(() => ({ success: true }));
+  if (!rate.success) {
+    return Response.json(
+      { success: false, error: "Too many registrations. Please try again later." },
+      { status: 429 },
+    );
+  }
+
   let body: unknown;
   try {
     body = await request.json();
@@ -152,82 +197,36 @@ export async function POST(request: Request) {
     );
   }
 
-  const submission = validateSubmission(body);
-  if (!submission) {
+  const result = validateSubmission(body);
+  if ("error" in result) {
     return Response.json(
-      {
-        success: false,
-        error:
-          "Some registration details are missing or invalid. Check the form and try again.",
-      },
+      { success: false, error: result.error },
       { status: 400 },
     );
   }
 
-  const registrationUrl = process.env.REGISTRATION_URL;
-  if (!registrationUrl) {
-    return Response.json(
-      {
-        success: false,
-        error:
-          "Registration is not configured yet. Please contact the fest organizers.",
-      },
-      { status: 503 },
-    );
-  }
+  const submission = result.submission;
 
   try {
-    const endpoint = new URL(registrationUrl);
-    if (endpoint.protocol !== "https:") {
-      return Response.json(
-        {
-          success: false,
-          error: "The registration service URL must use HTTPS.",
-        },
-        { status: 503 },
-      );
-    }
-
-    const upstreamResponse = await fetch(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(submission),
-      cache: "no-store",
+    await prisma.eventRegistration.create({
+      data: {
+        eventId: submission.eventId,
+        eventName: submission.eventName,
+        fullName: submission.fullName,
+        email: submission.email,
+        phone: submission.phone,
+        collegeName: submission.collegeName,
+        branch: submission.branch,
+        year: submission.year,
+        rollNumber: submission.rollNumber,
+        teamName: submission.teamName,
+        teamMembers: submission.teamMembers,
+        isExternalTeam: submission.isExternalTeam,
+      },
     });
-    const upstreamBody = await upstreamResponse.text();
-    let upstreamResult: unknown;
-
-    try {
-      upstreamResult = JSON.parse(upstreamBody);
-    } catch {
-      upstreamResult = null;
-    }
-
-    if (
-      !upstreamResponse.ok ||
-      (upstreamResult !== null &&
-        isObject(upstreamResult) &&
-        upstreamResult.success === false)
-    ) {
-      return Response.json(
-        {
-          success: false,
-          error:
-            "The registration service could not accept your details. Please try again later.",
-        },
-        { status: 502 },
-      );
-    }
 
     return Response.json({ success: true });
-  } catch {
-    return Response.json(
-      {
-        success: false,
-        error:
-          "We could not reach the registration service. Please try again later.",
-      },
-      { status: 502 },
-    );
+  } catch (error) {
+    return safeServerError("Failed to store registration:", error);
   }
 }

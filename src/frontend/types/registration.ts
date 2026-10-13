@@ -27,5 +27,7 @@ export type RegistrationSubmission = {
   rollNumber: string;
   teamName: string;
   teamMembers: RegistrationTeamMember[];
+  // Hackathon only: the team declared they are not from BIT.
+  isExternalTeam: boolean;
   acceptedPrivacyPolicy: boolean;
 };

@@ -268,3 +268,43 @@ export interface Registration {
 export async function fetchRegistrations(): Promise<Registration[]> {
   return apiRequest<Registration[]>("/support");
 }
+
+// ==================== EVENT REGISTRATIONS API ====================
+
+export interface EventRegistrationTeamMember {
+  name: string;
+  email: string;
+  branch: string;
+  year: string;
+  phone: string;
+}
+
+export interface EventRegistration {
+  id: string;
+  eventId: string;
+  eventName: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  collegeName: string;
+  branch: string;
+  year: string;
+  rollNumber: string;
+  teamName: string;
+  teamMembers: EventRegistrationTeamMember[];
+  isExternalTeam: boolean;
+  createdAt: string;
+}
+
+export async function fetchEventRegistrations(
+  eventId?: string,
+): Promise<EventRegistration[]> {
+  const query = eventId ? `?eventId=${encodeURIComponent(eventId)}` : "";
+  return apiRequest<EventRegistration[]>(`/admin/event-registrations${query}`);
+}
+
+// Same-origin GET with the httpOnly session cookie, so a plain link works.
+export function eventRegistrationsExportUrl(eventId?: string): string {
+  const query = eventId ? `?eventId=${encodeURIComponent(eventId)}` : "";
+  return `/api/admin/event-registrations/export${query}`;
+}
