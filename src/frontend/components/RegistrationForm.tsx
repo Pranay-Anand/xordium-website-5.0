@@ -44,7 +44,8 @@ export default function RegistrationForm({ initialEventId }: Props) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [collegeName, setCollegeName] = useState("");
+  // Auto-filled for BIT teams; user-editable only for external teams
+  const [collegeName, setCollegeName] = useState("Birla Institute of Technology, Patna");
   const [branch, setBranch] = useState<Branch | "">("");
   const [year, setYear] = useState("");
   const [rollNumber, setRollNumber] = useState("");
@@ -108,11 +109,14 @@ export default function RegistrationForm({ initialEventId }: Props) {
       ["fullName", fullName, "Enter your full name."],
       ["email", email, "Enter your email address."],
       ["phone", phone, "Enter your phone number."],
-      ["collegeName", collegeName, "Enter your college name."],
       ["branch", branch, "Select your branch."],
       ["year", year, "Enter your year of study."],
       ["rollNumber", rollNumber, "Enter your roll or registration number."],
     ];
+
+    if (isExternalTeam) {
+      requiredValues.push(["collegeName", collegeName, "Enter your college name."]);
+    }
 
     for (const [field, value, message] of requiredValues) {
       if (!value.trim()) nextErrors[field] = message;
@@ -345,14 +349,29 @@ export default function RegistrationForm({ initialEventId }: Props) {
             onChange={setPhone}
             required
           />
-          <TextField
-            id="collegeName"
-            label="College name"
-            value={collegeName}
-            error={errors.collegeName}
-            onChange={setCollegeName}
-            required
-          />
+          {isExternalTeam ? (
+            <TextField
+              id="collegeName"
+              label="College name"
+              value={collegeName}
+              error={errors.collegeName}
+              onChange={setCollegeName}
+              required
+            />
+          ) : (
+            <div>
+              <label htmlFor="collegeName" className="field-label">
+                College name
+              </label>
+              <input
+                id="collegeName"
+                type="text"
+                value="Birla Institute of Technology, Patna"
+                readOnly
+                className="field-control bg-white/5 cursor-not-allowed"
+              />
+            </div>
+          )}
           <div>
             <label htmlFor="branch" className="field-label">
               Branch
