@@ -88,7 +88,7 @@ export default function EventFilters() {
 
       {/* Event cards grid */}
       {filteredEvents.length === 0 ? (
-        <div className="border border-white/10 bg-[#101218] p-8 rounded text-center">
+        <div className="glass-panel p-8 text-center">
           <p className="font-mono text-[13px] text-white/60">No protocols match your query. Clear search or adjust filters.</p>
         </div>
       ) : (
@@ -126,7 +126,7 @@ export default function EventFilters() {
 
             const Info = (
               <div
-                className={`flex w-full flex-col justify-center bg-[#0a0c10]/60 backdrop-blur-xl border border-white/10 p-5 lg:p-7 ${posterOnLeft ? "lg:pl-6" : "lg:pr-6"}`}
+                className={`flex w-full flex-col justify-center p-5 lg:p-7 ${posterOnLeft ? "lg:pl-6" : "lg:pr-6"}`}
               >
                 {/* Index */}
                 <p className="font-mono text-[13px] tracking-[0.35em] text-red-500 uppercase">
@@ -190,7 +190,7 @@ export default function EventFilters() {
             return (
               <div
                 key={e.slug}
-                className="flex flex-col overflow-hidden border border-white/10 bg-[#0a0c10]/60 backdrop-blur-xl border border-white/10 lg:h-96 lg:flex-row lg:items-stretch rounded-xl overflow-hidden"
+                className="glass-panel flex flex-col overflow-hidden lg:h-96 lg:flex-row lg:items-stretch"
               >
                 {posterOnLeft ? (
                   <>

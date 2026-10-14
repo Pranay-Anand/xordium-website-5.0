@@ -36,9 +36,9 @@ export default function Countdown({
 
   return (
     <div>
-      <div className="grid grid-cols-4 gap-px overflow-hidden rounded border border-white/10 bg-white/10">
+      <div className="glass-panel grid grid-cols-4 gap-px overflow-hidden">
         {cells.map((c) => (
-          <div key={c.key} className="bg-[#14161c] px-2 py-4 text-center sm:py-5">
+          <div key={c.key} className="bg-white/[0.08] px-2 py-4 text-center sm:py-5">
             <div className="font-display text-3xl font-black tabular-nums text-white sm:text-4xl">
               {String(parts[c.key]).padStart(2, "0")}
             </div>

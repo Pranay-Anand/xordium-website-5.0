@@ -6,7 +6,7 @@ import MarkdownText from "@/components/markdown-text";
 
 export default function EventCard({ event }: { event: FestEvent }) {
   return (
-    <article className="group flex flex-col overflow-hidden rounded border border-white/10 bg-[#101218]">
+    <article className="glass-panel group flex flex-col overflow-hidden">
       <div className="relative h-44 overflow-hidden">
         <Image
           src={event.image}

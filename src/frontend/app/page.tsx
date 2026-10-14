@@ -58,7 +58,7 @@ export default function Home() {
           sizes="100vw"
           className="object-cover opacity-25"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0c10]/60 via-[#0a0c10]/85 to-[#0a0c10]"/>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0c10]/40 via-[#0a0c10]/55 to-[#0a0c10]/70"/>
         <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-10 text-center">
           <p className="font-mono text-[10px] tracking-[0.3em] text-red-500 uppercase">
             ■ Birla Institute of Technology // Ignite x Esports // 2026 edition
@@ -143,7 +143,7 @@ export default function Home() {
           {schedule.map((s) => (
             <div
               key={s.title}
-              className="grid gap-2 rounded border border-white/10 bg-[#101218] p-4 sm:grid-cols-[140px_1fr_auto] sm:items-center"
+              className="glass-panel grid gap-2 p-4 sm:grid-cols-[140px_1fr_auto] sm:items-center"
             >
               <span className="font-mono text-xs text-cyan-300">{s.time}</span>
               <div>
@@ -181,7 +181,7 @@ export default function Home() {
             ignite@bitmesra.ac.in
           </p>
         </div>
-        <div className="relative min-h-64 overflow-hidden rounded border border-white/10">
+        <div className="glass-panel relative min-h-64 overflow-hidden">
           <Image
             src="/assets/treasure-hunt.jpg"
             alt="BIT campus arena map"
@@ -197,8 +197,8 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-white/10 bg-gradient-to-b from-[#16090b] to-[#0a0c10]">
-        <div className="mx-auto max-w-6xl px-4 py-16 text-center">
+      <section className="border-t border-white/10">
+        <div className="glass-panel mx-auto max-w-6xl px-4 py-16 text-center">
           <p className="font-mono text-[11px] tracking-[0.3em] text-red-500 uppercase">
             {"//"} Comms endpoint
           </p>

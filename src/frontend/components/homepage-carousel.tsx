@@ -58,9 +58,9 @@ export default function HomepageCarousel() {
   const renderedImages = images.length > 1 ? [...images, ...images] : images;
 
   return (
-    <section className="border-y border-white/10 bg-[#0d0f14]">
+    <section className="border-y border-white/10">
       <div className="mx-auto max-w-6xl px-4 py-14">
-        <div ref={viewportRef} className="overflow-hidden border border-white/10 bg-[#101218] min-h-[300px]">
+        <div ref={viewportRef} className="glass-panel min-h-[300px] overflow-hidden">
           {images.length > 0 ? (
             <div
               className="flex"

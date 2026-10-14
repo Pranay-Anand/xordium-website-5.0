@@ -12,7 +12,7 @@ export default function SupportPage() {
         title="Support"
         blurb="Transmission issues, registration queries, or hardware compatibility checks — open a ticket and the committee arbiters respond via comms."
       />
-      <div className="mt-4 rounded border border-white/10 bg-[#101218] p-5">
+      <div className="glass-panel mt-4 p-5">
         <SupportForm />
       </div>
     </section>

@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
+import type { ReactNode } from "react";
 import SiteHeader from "@/components/site-header";
 import SiteFooter from "@/components/site-footer";
+import BackgroundCollage from "@/components/BackgroundCollage";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,20 +12,22 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0c10",
+  themeColor: "#1a1a2e",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[#0a0c10] text-white antialiased">
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+      <body className="bg-[#1a1a2e] text-white antialiased">
+        <BackgroundCollage>
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+        </BackgroundCollage>
       </body>
     </html>
   );
