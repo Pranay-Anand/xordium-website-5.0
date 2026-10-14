@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Countdown from "@/components/countdown";
 import EventCard from "@/components/event-card";
+import HomepageCarousel from "@/components/homepage-carousel";
 import SectionHeading from "@/components/section-heading";
 import { REGISTRATION_DEADLINE, getFeaturedEvents } from "@/lib/events";
 
@@ -114,7 +115,7 @@ export default function Home() {
               href=""
               className="border border-white/25 px-6 py-3 font-mono text-xs tracking-[0.2em] uppercase hover:bg-white/10"
             >
-              ↓ Official rulebook [PDF]
+              ↓ Official Brochure [PDF]
             </Link>
           </div>
           <div className="mx-auto mt-8 grid max-w-4xl grid-cols-2 gap-px overflow-hidden rounded border border-white/10 bg-white/10 sm:grid-cols-4">
@@ -135,6 +136,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <HomepageCarousel />
 
       {/* SCHEDULE */}
       <section className="mx-auto max-w-6xl px-4 py-14">

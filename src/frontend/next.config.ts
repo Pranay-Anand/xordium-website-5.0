@@ -28,6 +28,14 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: "/carousel/:file*",
+        destination: "/carousel/:file*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
