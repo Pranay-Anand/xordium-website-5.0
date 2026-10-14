@@ -45,7 +45,7 @@ function CoreCard({
   };
 
   return (
-    <div className="flex flex-col items-center gap-3 group">
+    <div className="glass-panel group flex flex-col items-center gap-3 p-3">
       {/* Photo */}
       <div
         className={`relative ${sizeClasses[size]} rounded-full overflow-hidden border-2 border-white/10 group-hover:border-red-500/60 transition-all duration-300 shadow-lg group-hover:shadow-red-500/20 group-hover:shadow-xl`}
@@ -86,7 +86,7 @@ function CoordinatorCard({ member }: { member: CoordinatorMember }) {
   const [imgSrc, setImgSrc] = useState(resolveImage(member.image));
 
   return (
-    <div className="flex flex-col items-center gap-3 group w-full">
+    <div className="glass-panel group flex w-full flex-col items-center gap-3 p-3">
       <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-cyan-400/60 transition-all duration-300 shadow-lg group-hover:shadow-cyan-400/20 group-hover:shadow-xl">
         <Image
           src={imgSrc}
@@ -223,7 +223,7 @@ function CoordinatorGallery({
 // ─── Main TeamSection Component ───────────────────────────────────────────────
 export default function TeamSection() {
   return (
-    <section className="border-y border-white/10 bg-[#0d0f14]">
+    <section className="border-y border-white/10">
       <div className="mx-auto max-w-6xl px-4 py-16 space-y-20">
         <SectionHeading
           kicker="The people behind the machine"

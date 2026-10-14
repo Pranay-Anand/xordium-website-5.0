@@ -11,7 +11,7 @@ export default async function RegistrationPage({
 
   return (
     <>
-      <section className="border-b border-white/10 bg-gradient-to-b from-[#16090b] to-[#0a0c10]">
+      <section className="border-b border-white/10">
         <div className="mx-auto max-w-6xl px-4 pt-10 pb-8">
           <p className="font-mono text-[10px] tracking-[0.3em] text-red-500 uppercase">
             Participant intake // Xordium 5.0
@@ -27,7 +27,7 @@ export default async function RegistrationPage({
       </section>
 
       <main className="mx-auto max-w-4xl px-4 py-8 sm:py-10">
-        <div className="rounded border border-white/10 bg-[#101218] p-4 sm:p-7">
+        <div className="glass-panel p-4 sm:p-7">
           <RegistrationForm initialEventId={initialEventId} />
         </div>
       </main>

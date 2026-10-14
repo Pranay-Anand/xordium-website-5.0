@@ -26,7 +26,7 @@ export default async function EventDetailPage({
       >
         ← Back to directory
       </Link>
-      <div className="mt-4 grid gap-6 lg:grid-cols-2">
+      <div className="glass-panel mt-4 grid gap-6 overflow-hidden p-4 sm:p-6 lg:grid-cols-2">
         <div className="relative min-h-72 overflow-hidden rounded border border-white/10">
           <Image
             src={event.image}
@@ -50,7 +50,7 @@ export default async function EventDetailPage({
           <MarkdownText className="mt-3 font-mono text-xs leading-relaxed text-white/60">
             {event.description}
           </MarkdownText>
-          <dl className="mt-5 space-y-2 rounded border border-white/10 bg-[#101218] p-4 font-mono text-xs">
+          <dl className="glass-panel mt-5 space-y-2 p-4 font-mono text-xs">
             {[
               ["Prize pool", event.prizePool],
               ["Venue", event.venue],

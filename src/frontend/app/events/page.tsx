@@ -10,7 +10,7 @@ export default function EventsPage() {
 
   return (
     <>
-      <section className="border-b border-white/10 bg-gradient-to-b from-[#16090b] to-[#0a0c10]">
+      <section className="border-b border-white/10">
         <div className="mx-auto max-w-6xl px-4 pt-6 pb-5">
           <p className="font-mono text-[10px] tracking-[0.3em] text-red-500 uppercase">
             Syllabus 2026 // Arena directory active // Cycle 05
@@ -29,7 +29,7 @@ export default function EventsPage() {
 
       <section className="mx-auto max-w-6xl px-4 py-5">
         {/* Flagship */}
-        <div className="overflow-hidden rounded border border-white/10 bg-[#101218]">
+        <div className="glass-panel overflow-hidden">
           <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-1.5">
             <p className="font-mono text-[10px] tracking-[0.2em] text-red-400 uppercase">
               Flagship // Hackathon

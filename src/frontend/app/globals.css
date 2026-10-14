@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -13,7 +13,7 @@ html {
 }
 
 body {
-  background-color: #0a0c10;
+  background-color: #1a1a2e;
   color: #fff;
   font-family: var(--font-mono), ui-monospace, monospace;
   -webkit-font-smoothing: antialiased;
@@ -21,7 +21,105 @@ body {
   font-size: 13px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+.collage-shell {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  overflow-x: clip;
+  background: #1a1a2e;
+}
+
+.background-collage {
+  --tile-left: 0px;
+  --tile-top: 0px;
+  --tile-width: 0px;
+  --tile-height: 0px;
+  --tile-rotation: 0deg;
+  --tile-delay: 0ms;
+
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  filter: blur(1.5px);
+  pointer-events: none;
+  transition:
+    opacity 750ms ease-in-out,
+    filter 750ms ease-in-out;
+}
+
+.background-collage.is-visible {
+  opacity: 0.44;
+}
+
+.background-collage::after {
+  position: absolute;
+  z-index: 2;
+  background: rgb(0 0 0 / 35%);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+}
+
+.collage-tile {
+  position: absolute;
+  top: var(--tile-top);
+  left: var(--tile-left);
+  z-index: 1;
+  width: var(--tile-width);
+  height: var(--tile-height);
+  overflow: hidden;
+  opacity: 0;
+  transform: rotate(var(--tile-rotation)) scale(0.96);
+  transition:
+    opacity 750ms ease-in-out var(--tile-delay),
+    transform 750ms ease-in-out var(--tile-delay);
+}
+
+.background-collage.is-visible .collage-tile.is-loaded {
+  opacity: 1;
+  transform: rotate(var(--tile-rotation)) scale(1);
+}
+
+.collage-tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.glass-panel {
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: 16px;
+  background: rgb(255 255 255 / 15%);
+  box-shadow: 0 4px 30px rgb(0 0 0 / 10%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+}
+
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .glass-panel {
+    background: rgb(10 12 16 / 88%);
+  }
+}
+
+.collage-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -49,7 +147,9 @@ h1, h2, h3, h4, h5, h6 {
   color: white;
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 13px;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .field-control::placeholder {
@@ -78,7 +178,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0c10;
+  background: #1a1a2e;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -98,5 +198,16 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Smooth transitions */
 * {
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .background-collage,
+  .collage-tile {
+    transition-duration: 0.01ms;
+    transition-delay: 0ms;
+  }
 }

@@ -11,7 +11,7 @@ const scale = [{
 
 export default function AboutPage() {
   return (<>
-    <section className="border-b border-white/10 bg-gradient-to-b from-[#16090b] to-[#0a0c10]">
+    <section className="border-b border-white/10">
       <div className="mx-auto max-w-6xl px-4 pt-10 pb-8">
         <p className="font-mono text-[10px] tracking-[0.3em] text-red-500 uppercase">
           Sys // Declassified overview // Protocol 2026
@@ -75,15 +75,15 @@ export default function AboutPage() {
     </section>
 
     {/* Scale */}
-    <section className="border-y border-white/10 bg-[#0d0f14]">
+    <section className="border-y border-white/10">
       <div className="mx-auto max-w-6xl px-4 py-12">
         <SectionHeading
           kicker="Telemetry benchmarks"
           title="Scale of engagement"
         />
         <div
-          className="grid gap-px overflow-hidden rounded border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
-          {scale.map((s) => (<div key={s.label} className="bg-[#101218] p-5">
+          className="glass-panel grid gap-px overflow-hidden sm:grid-cols-2 lg:grid-cols-4">
+          {scale.map((s) => (<div key={s.label} className="bg-transparent p-5">
             <p className="font-display text-5xl font-black">{s.value}</p>
             <p className="mt-2 font-mono text-[11px] leading-relaxed text-white/55">
               {s.label}
@@ -98,8 +98,8 @@ export default function AboutPage() {
 
 
     {/* CTA */}
-    <section className="border-t border-white/10 bg-gradient-to-b from-[#16090b] to-[#0a0c10]">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-12 sm:flex-row">
+    <section className="border-t border-white/10">
+      <div className="glass-panel mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-12 sm:flex-row">
         <div>
           <h2 className="font-display text-3xl font-black uppercase">
             Prepare your deck for 2026

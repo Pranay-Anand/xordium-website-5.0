@@ -1,7 +1,7 @@
 export default function PrivacyPage() {
   return (
     <>
-      <section className="border-b border-white/10 bg-gradient-to-b from-[#16090b] to-[#0a0c10]">
+      <section className="border-b border-white/10">
         <div className="mx-auto max-w-6xl px-4 py-10">
           <p className="font-mono text-[10px] tracking-[0.3em] text-red-500 uppercase">
             Participant information // Policy
@@ -11,7 +11,7 @@ export default function PrivacyPage() {
           </h1>
         </div>
       </section>
-      <main className="mx-auto max-w-3xl space-y-6 px-4 py-10 font-mono text-xs leading-relaxed text-white/65">
+      <main className="glass-panel mx-auto my-10 max-w-3xl space-y-6 px-6 py-8 font-mono text-xs leading-relaxed text-white/65 sm:px-8">
         <section>
           <h2 className="font-display text-xl font-extrabold text-white uppercase">
             Information collected
