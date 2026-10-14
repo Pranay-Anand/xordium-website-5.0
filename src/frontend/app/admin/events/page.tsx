@@ -406,18 +406,18 @@ export default function EventsPage() {
           <p className="font-mono text-sm text-white/60">No events found.</p>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 gap-4 max-w-[1080px] mx-auto">
           {events.map((event) => (
             <div
               key={event.id}
-              className="border border-white/10 bg-white/5 p-4 rounded hover:border-white/20 transition-colors"
+              className="border border-white/10 bg-white/5 p-4 rounded hover:border-white/20 transition-colors flex flex-col"
             >
               <div className="flex items-start justify-between mb-3">
-                <div>
+                <div className="min-w-0">
                   <p className="font-mono text-[10px] text-red-400 uppercase tracking-[0.15em]">
                     {event.featured ? " " : ""}{event.tag}
                   </p>
-                  <h3 className="font-mono text-sm font-bold text-white mt-1">
+                  <h3 className="font-mono text-sm font-bold text-white mt-1 truncate">
                     {event.title}
                   </h3>
                 </div>
@@ -435,26 +435,29 @@ export default function EventsPage() {
                 </div>
               </div>
 
-              {(event.posterUrl || event.image) && (
-                <div className="mb-3">
-                  <img
-                    src={event.posterUrl || event.image}
-                    alt={event.title}
-                    className="w-full h-48 object-contain rounded border border-white/10 bg-white/5"
-                  />
+              <div className="flex gap-4 mb-3">
+                {(event.posterUrl || event.image) && (
+                  <div className="shrink-0 w-48 flex-shrink-0">
+                    <img
+                      src={event.posterUrl || event.image}
+                      alt={event.title}
+                      className="w-full aspect-[3/4] object-contain rounded border border-white/10 bg-white/5"
+                    />
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  {event.description && (
+                    <p className="font-mono text-[11px] text-white/60 line-clamp-6">
+                      {stripMarkdown(event.description).slice(0, 400)}...
+                    </p>
+                  )}
+                  <p className="font-mono text-[10px] text-white/40 mt-2">
+                    {event.category}
+                  </p>
                 </div>
-              )}
+              </div>
 
-              {event.description && (
-                <p className="font-mono text-[11px] text-white/60 line-clamp-4 mb-3">
-                  {stripMarkdown(event.description).slice(0, 300)}...
-                </p>
-              )}
-
-              <div className="flex items-center justify-between">
-                <p className="font-mono text-[10px] text-white/40">
-                  {event.category}
-                </p>
+              <div className="flex items-center justify-between border-t border-white/10 pt-4">
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => startEditing(event)}
