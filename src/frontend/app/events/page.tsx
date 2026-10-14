@@ -15,26 +15,15 @@ export default function EventsPage() {
           <p className="font-mono text-[10px] tracking-[0.3em] text-red-500 uppercase">
             Syllabus 2026 // Arena directory active // Cycle 05
           </p>
-          <h1 className="mt-1.5 font-display text-4xl leading-none font-black tracking-tight uppercase sm:text-6xl">
+          <h1 className="mt-1.5 font-display text-4xl leading-none font-black uppercase sm:text-6xl">
             Events directory{" "}
             <span className="text-red-600">{"//"}</span>{" "}
             <span className="text-cyan-300">競技一覧</span>
           </h1>
-          <div className="mt-3 flex flex-col justify-between gap-3 lg:flex-row lg:items-end">
-            <p className="max-w-2xl font-mono text-[11px] leading-relaxed text-white/60">
-              Official syllabus of competitive tracks, endurance hackathons,
-              hardware symposia, and premier national esports championships
-              engineered for Birla Institute of Technology.
-            </p>
-            <div className="shrink-0 rounded border border-white/10 bg-[#101218] px-4 py-2">
-              <p className="font-mono text-[10px] tracking-[0.25em] text-white/45 uppercase">
-                Cumulative purse
-              </p>
-              <p className="font-display text-2xl font-black text-cyan-300">
-                {TOTAL_PRIZE_POOL} INR
-              </p>
-            </div>
-          </div>
+          <p className="mt-3 max-w-2xl font-mono text-xs leading-relaxed text-white/60">
+            List of events, technical, esports and fun for you to drop in
+            engineered for Birla Institute of Technology.
+          </p>
         </div>
       </section>
 
@@ -107,6 +96,7 @@ export default function EventsPage() {
                   ))}
                 </div>
               </div>
+
               <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                 <Link
                   href={getRegistrationHref(flagship.slug)}
@@ -129,7 +119,6 @@ export default function EventsPage() {
         <div className="mt-6">
           <EventFilters />
         </div>
-
       </section>
     </>
   );

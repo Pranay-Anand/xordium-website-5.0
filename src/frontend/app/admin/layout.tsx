@@ -97,7 +97,7 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen flex flex-col">
       {/* Top navigation bar */}
-      <header className="border-b border-white/10 bg-white/5">
+      <header className="border-b border-white/10 bg-[#08090c]">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-4">
             <Link
@@ -140,7 +140,7 @@ export default function AdminLayout({
       <main className="flex-1 max-w-7xl mx-auto px-4 py-8 w-full">{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-4">
+      <footer className="border-t border-white/10 bg-[#08090c] py-4">
         <div className="max-w-7xl mx-auto px-4 font-mono text-[10px] text-white/40 uppercase tracking-[0.2em]">
           Xordium Admin Panel v5.0
         </div>

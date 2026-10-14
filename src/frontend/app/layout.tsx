@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#282a36",
+  themeColor: "#0a0c10",
 };
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-[var(--color-dracula-bg)] text-[var(--color-dracula-fg)] antialiased">
+      <body className="bg-[#0a0c10] text-white antialiased">
         <SiteHeader />
         {children}
         <SiteFooter />
