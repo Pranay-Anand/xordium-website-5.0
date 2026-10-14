@@ -4,13 +4,13 @@ import Countdown from "@/components/countdown";
 import EventCard from "@/components/event-card";
 import HomepageCarousel from "@/components/homepage-carousel";
 import SectionHeading from "@/components/section-heading";
-import { REGISTRATION_DEADLINE, getFeaturedEvents } from "@/lib/events";
+import {getFeaturedEvents, REGISTRATION_DEADLINE} from "@/lib/events";
 
 const stats = [
-  { value: "$15,000+", label: "Prize pool & bounty contracts" },
-  { value: "128+ TEAMS", label: "Collegiate varsity contenders" },
-  { value: "96 HOURS", label: "Continuous tournament stream" },
-  { value: "BIT CAMPUS", label: "Mesra // 550 acre complex" },
+  {value: "$15,000+", label: "Prize pool & bounty contracts"},
+  {value: "128+ TEAMS", label: "Collegiate varsity contenders"},
+  {value: "96 HOURS", label: "Continuous tournament stream"},
+  {value: "BIT CAMPUS", label: "Mesra // 550 acre complex"},
 ];
 
 const schedule = [
@@ -43,30 +43,6 @@ const schedule = [
     mode: "Sprint start",
   },
 ];
-
-const directives = [
-  {
-    n: "01",
-    title: "Eligibility verification",
-    body: "Participants must present valid collegiate ID. Cross-institutional squads permitted across hackathon and CTF categories.",
-  },
-  {
-    n: "02",
-    title: "Peripheral & hardware sanction",
-    body: "Personal mice, keyboards, and controllers scanned before LAN deployment. No unauthorized firmware.",
-  },
-  {
-    n: "03",
-    title: "Accommodation & campus lodging",
-    body: "On-campus hostels with 24/7 cafeteria access. Allotment for participants with confirmed stage-02 registration.",
-  },
-  {
-    n: "04",
-    title: "Fair-play & integrity charter",
-    body: "Zero-tolerance anti-cheat. Unauthorized client monitoring triggers instantaneous removal and academic notification.",
-  },
-];
-
 export default function Home() {
   const featured = getFeaturedEvents();
 
@@ -82,7 +58,7 @@ export default function Home() {
           sizes="100vw"
           className="object-cover opacity-25"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0c10]/60 via-[#0a0c10]/85 to-[#0a0c10]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0c10]/60 via-[#0a0c10]/85 to-[#0a0c10]"/>
         <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-10 text-center">
           <p className="font-mono text-[10px] tracking-[0.3em] text-red-500 uppercase">
             ■ Birla Institute of Technology // Ignite x Esports // 2026 edition
@@ -102,7 +78,7 @@ export default function Home() {
             pinnacle of collegiate esports and intellectual prowess.
           </p>
           <div className="mx-auto mt-6 max-w-xl">
-            <Countdown target={REGISTRATION_DEADLINE} caption="Event commence in" />
+            <Countdown target={REGISTRATION_DEADLINE} caption="Event commence in"/>
           </div>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
@@ -118,7 +94,8 @@ export default function Home() {
               ↓ Official Brochure [PDF]
             </Link>
           </div>
-          <div className="mx-auto mt-8 grid max-w-4xl grid-cols-2 gap-px overflow-hidden rounded border border-white/10 bg-white/10 sm:grid-cols-4">
+          <div
+            className="mx-auto mt-8 grid max-w-4xl grid-cols-2 gap-px overflow-hidden rounded border border-white/10 bg-white/10 sm:grid-cols-4">
           </div>
         </div>
       </section>
@@ -132,12 +109,12 @@ export default function Home() {
         />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((e) => (
-            <EventCard key={e.slug} event={e} />
+            <EventCard key={e.slug} event={e}/>
           ))}
         </div>
       </section>
 
-      <HomepageCarousel />
+      <HomepageCarousel/>
 
       {/* SCHEDULE */}
       <section className="mx-auto max-w-6xl px-4 py-14">
@@ -200,7 +177,7 @@ export default function Home() {
           </p>
           <p className="mt-3 font-mono text-[11px] text-white/45">
             Birla Institute of Technology, Patna, Bihar 800014
-            <br />
+            <br/>
             ignite@bitmesra.ac.in
           </p>
         </div>
@@ -212,7 +189,8 @@ export default function Home() {
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover opacity-80"
           />
-          <span className="absolute bottom-2 left-2 bg-black/70 px-2 py-1 font-mono text-[10px] tracking-[0.2em] text-cyan-300 uppercase">
+          <span
+            className="absolute bottom-2 left-2 bg-black/70 px-2 py-1 font-mono text-[10px] tracking-[0.2em] text-cyan-300 uppercase">
             Coordinates - 25.59556, 85.08639
           </span>
         </div>

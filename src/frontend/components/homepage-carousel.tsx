@@ -52,8 +52,6 @@ export default function HomepageCarousel() {
     }
   }, [images.length, slide]);
 
-  if (images.length === 0) return null;
-
   const isDesktop = width >= 1024;
   const slideWidth = isDesktop ? width / 4 : width / 1.5;
 
@@ -62,29 +60,35 @@ export default function HomepageCarousel() {
   return (
     <section className="border-y border-white/10 bg-[#0d0f14]">
       <div className="mx-auto max-w-6xl px-4 py-14">
-        <div ref={viewportRef} className="overflow-hidden border border-white/10 bg-[#101218]">
-          <div
-            className="flex"
-            style={{
-              transition: "transform 700ms ease-in-out",
-              transform: `translateX(-${slide * slideWidth}px)`,
-            }}
-          >
-            {renderedImages.map((image, index) => (
-              <div
-                key={`${image.id}-${index}`}
-                className="h-[300px] shrink-0 border-r border-white/10 last:border-r-0"
-                style={{ width: isDesktop ? "25%" : "66.666667%" }}
-              >
-                <img
-                  src={`/carousel/${image.id}`}
-                  alt={image.altText}
-                  draggable={false}
-                  className="pointer-events-none h-full w-full select-none object-cover"
-                />
-              </div>
-            ))}
-          </div>
+        <div ref={viewportRef} className="overflow-hidden border border-white/10 bg-[#101218] min-h-[300px]">
+          {images.length > 0 ? (
+            <div
+              className="flex"
+              style={{
+                transition: "transform 700ms ease-in-out",
+                transform: `translateX(-${slide * slideWidth}px)`,
+              }}
+            >
+              {renderedImages.map((image, index) => (
+                <div
+                  key={`${image.id}-${index}`}
+                  className="h-[300px] shrink-0 border-r border-white/10 last:border-r-0"
+                  style={{ width: isDesktop ? "25%" : "66.666667%" }}
+                >
+                  <img
+                    src={`/carousel/${image.id}`}
+                    alt={image.altText}
+                    draggable={false}
+                    className="pointer-events-none h-full w-full select-none object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="h-[300px] flex items-center justify-center">
+              <div className="w-full h-full" />
+            </div>
+          )}
         </div>
         <p className="mt-4 text-center font-mono text-xs tracking-[0.25em] text-white/60 uppercase">
           Courtesy of Megapixels
