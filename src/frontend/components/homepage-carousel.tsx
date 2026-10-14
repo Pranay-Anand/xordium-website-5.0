@@ -90,7 +90,7 @@ export default function HomepageCarousel() {
             </div>
           )}
         </div>
-        <p className="mt-4 text-center font-mono text-xs tracking-[0.25em] text-white/60 uppercase">
+        <p className="mt-4 text-center font-mono text-[13px] tracking-[0.25em] text-white/60 uppercase">
           Courtesy of Megapixels
         </p>
       </div>

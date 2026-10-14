@@ -281,7 +281,7 @@ export default function RegistrationForm({ initialEventId }: Props) {
         <button
           type="button"
           onClick={() => window.location.reload()}
-          className="mt-6 min-h-11 bg-red-600 px-5 py-2.5 font-mono text-[11px] font-bold tracking-[0.15em] text-white uppercase hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+          className="mt-6 min-h-11 bg-red-600 px-5 py-2.5 font-mono text-[13px] font-bold tracking-[0.15em] text-white uppercase hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
         >
           Register another participant
         </button>
@@ -293,7 +293,7 @@ export default function RegistrationForm({ initialEventId }: Props) {
     <form onSubmit={handleSubmit} noValidate className="space-y-7">
       <section aria-labelledby="participant-heading">
         <div className="mb-4 border-b border-white/10 pb-3">
-          <p className="font-mono text-[10px] tracking-[0.2em] text-red-400 uppercase">
+          <p className="font-mono text-[13px] tracking-[0.2em] text-red-400 uppercase">
             Registration // 01
           </p>
           <h2
@@ -469,7 +469,7 @@ export default function RegistrationForm({ initialEventId }: Props) {
             />
           </div>
           {errors.teamSize ? (
-            <p className="mt-2 font-mono text-[11px] text-red-300" role="alert">
+            <p className="mt-2 font-mono text-[13px] text-red-300" role="alert">
               {errors.teamSize}
             </p>
           ) : null}
@@ -477,7 +477,7 @@ export default function RegistrationForm({ initialEventId }: Props) {
             type="button"
             disabled={totalTeamSize >= selectedEvent.maxTeamSize}
             onClick={() => setTeamMembers((current) => [...current, emptyMember()])}
-            className="mt-4 min-h-11 border border-cyan-300/50 px-4 py-2 font-mono text-[11px] font-bold tracking-[0.15em] text-cyan-200 uppercase transition hover:bg-cyan-300/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 disabled:cursor-not-allowed disabled:opacity-40"
+            className="mt-4 min-h-11 border border-cyan-300/50 px-4 py-2 font-mono text-[13px] font-bold tracking-[0.15em] text-cyan-200 uppercase transition hover:bg-cyan-300/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 disabled:cursor-not-allowed disabled:opacity-40"
           >
             + Add team member
           </button>
@@ -485,7 +485,7 @@ export default function RegistrationForm({ initialEventId }: Props) {
       ) : null}
 
       <section className="border-t border-white/10 pt-5">
-        <label className="flex items-start gap-3 font-mono text-xs leading-relaxed text-white/65">
+        <label className="flex items-start gap-3 font-mono text-[13px] leading-relaxed text-white/65">
           <input
             type="checkbox"
             checked={acceptedPrivacyPolicy}
@@ -518,7 +518,7 @@ export default function RegistrationForm({ initialEventId }: Props) {
 
       {formError ? (
         <p
-          className="rounded border border-red-500/40 bg-red-950/30 p-3 font-mono text-xs text-red-200"
+          className="rounded border border-red-500/40 bg-red-950/30 p-3 font-mono text-[13px] text-red-200"
           role="alert"
         >
           {formError}
@@ -528,7 +528,7 @@ export default function RegistrationForm({ initialEventId }: Props) {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="min-h-12 w-full bg-red-600 px-5 py-3 font-mono text-xs font-bold tracking-[0.2em] text-white uppercase transition hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 disabled:cursor-wait disabled:opacity-60 sm:w-auto"
+        className="min-h-12 w-full bg-red-600 px-5 py-3 font-mono text-[13px] font-bold tracking-[0.2em] text-white uppercase transition hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 disabled:cursor-wait disabled:opacity-60 sm:w-auto"
       >
         {isSubmitting ? "Submitting registration..." : "Submit registration →"}
       </button>

@@ -65,7 +65,7 @@ export default function EventFilters() {
   return (
     <div className="flex flex-col gap-6">
       {/* Category filters */}
-      <div className="flex flex-wrap gap-2 font-mono text-[11px] tracking-[0.15em] uppercase">
+      <div className="flex flex-wrap gap-2 font-mono text-[13px] tracking-[0.15em] uppercase">
         {FILTER_CATEGORIES.map((c) => (
           <button
             key={c}
@@ -81,7 +81,7 @@ export default function EventFilters() {
         ))}
       </div>
 
-      <p className="mt-6 font-mono text-[11px] tracking-[0.2em] text-white/40 uppercase">
+      <p className="mt-6 font-mono text-[13px] tracking-[0.2em] text-white/40 uppercase">
         ■ Event protocols [{" "}
         {String(filteredEvents.length).padStart(2, "0")} active protocols ]
       </p>
@@ -89,7 +89,7 @@ export default function EventFilters() {
       {/* Event cards grid */}
       {filteredEvents.length === 0 ? (
         <div className="border border-white/10 bg-[#101218] p-8 rounded text-center">
-          <p className="font-mono text-sm text-white/60">No protocols match your query. Clear search or adjust filters.</p>
+          <p className="font-mono text-[13px] text-white/60">No protocols match your query. Clear search or adjust filters.</p>
         </div>
       ) : (
         <div className="flex flex-col gap-5">
@@ -110,13 +110,13 @@ export default function EventFilters() {
                   />
                   {/* Tag */}
                   <div className="absolute left-3 top-3 z-10">
-                    <span className="bg-red-600 px-2 py-1 font-mono text-[9px] tracking-[0.2em] text-white uppercase">
+                    <span className="bg-red-600 px-2 py-1 font-mono text-[13px] tracking-[0.2em] text-white uppercase">
                       {e.tag}
                     </span>
                   </div>
                   {/* Category */}
                   <div className="absolute right-3 top-3 z-10">
-                    <span className="bg-black/70 px-2 py-1 font-mono text-[9px] tracking-[0.2em] text-cyan-300 uppercase">
+                    <span className="bg-black/70 px-2 py-1 font-mono text-[13px] tracking-[0.2em] text-cyan-300 uppercase">
                       {e.category}
                     </span>
                   </div>
@@ -129,7 +129,7 @@ export default function EventFilters() {
                 className={`flex w-full flex-col justify-center bg-[#0a0c10]/60 backdrop-blur-xl border border-white/10 p-5 lg:p-7 ${posterOnLeft ? "lg:pl-6" : "lg:pr-6"}`}
               >
                 {/* Index */}
-                <p className="font-mono text-[10px] tracking-[0.35em] text-red-500 uppercase">
+                <p className="font-mono text-[13px] tracking-[0.35em] text-red-500 uppercase">
                   {String(i + 1).padStart(2, "0")} /{" "}
                   {String(filteredEvents.length).padStart(2, "0")}
                 </p>
@@ -138,11 +138,11 @@ export default function EventFilters() {
                   {e.title}
                 </h3>
 
-                <MarkdownText className="mt-2 font-mono text-[11px] leading-relaxed text-white/60 line-clamp-3">
+                <MarkdownText className="mt-2 font-mono text-[13px] leading-relaxed text-white/60 line-clamp-3">
                   {e.description}
                 </MarkdownText>
 
-                <dl className="mt-4 space-y-2 border-t border-white/10 pt-4 font-mono text-[10px]">
+                <dl className="mt-4 space-y-2 border-t border-white/10 pt-4 font-mono text-[13px]">
                   <div className="flex justify-between gap-4">
                     <dt className="text-white/40 uppercase">Venue</dt>
                     <dd className="text-right text-white/80">{e.venue}</dd>
@@ -165,21 +165,21 @@ export default function EventFilters() {
 
                 <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
                   <div>
-                    <div className="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">
+                    <div className="font-mono text-[13px] tracking-[0.2em] text-white/40 uppercase">
                       Prize pool
                     </div>
                     <div className="font-display text-lg font-black text-red-500">
                       {e.prizePool}
                     </div>
                     {e.prizeNote && (
-                      <div className="font-mono text-[10px] text-cyan-300 uppercase">
+                      <div className="font-mono text-[13px] text-cyan-300 uppercase">
                         {e.prizeNote}
                       </div>
                     )}
                   </div>
                   <Link
                     href={getRegistrationHref(e.slug)}
-                    className="bg-red-600 px-4 py-2 font-mono text-[10px] font-bold tracking-[0.15em] text-white uppercase transition hover:bg-red-500"
+                    className="bg-red-600 px-4 py-2 font-mono text-[13px] font-bold tracking-[0.15em] text-white uppercase transition hover:bg-red-500"
                   >
                     {e.cta} →
                   </Link>

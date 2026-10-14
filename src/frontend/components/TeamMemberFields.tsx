@@ -39,7 +39,7 @@ export default function TeamMemberFields({
             <button
               type="button"
               onClick={() => onRemove(index)}
-              className="rounded border border-white/20 px-3 py-1.5 font-mono text-[10px] tracking-[0.15em] text-white/70 uppercase hover:border-red-500 hover:text-red-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+              className="rounded border border-white/20 px-3 py-1.5 font-mono text-[13px] tracking-[0.15em] text-white/70 uppercase hover:border-red-500 hover:text-red-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
               aria-label={`Remove team member ${index + 2}`}
             >
               Remove
@@ -64,7 +64,7 @@ export default function TeamMemberFields({
             <div>
               <label
                 htmlFor={`member-${index}-branch`}
-                className="font-mono text-[11px] tracking-[0.15em] text-white/70 uppercase"
+                className="font-mono text-[13px] tracking-[0.15em] text-white/70 uppercase"
               >
                 Branch
               </label>
@@ -78,7 +78,7 @@ export default function TeamMemberFields({
                     ? `member-${index}-branch-error`
                     : undefined
                 }
-                className="mt-1.5 block min-h-11 w-full rounded border border-white/15 bg-[#0a0c10] px-3 py-2.5 font-mono text-xs text-white focus:border-cyan-300 focus:outline-none"
+                className="mt-1.5 block min-h-11 w-full rounded border border-white/15 bg-[#0a0c10] px-3 py-2.5 font-mono text-[13px] text-white focus:border-cyan-300 focus:outline-none"
               >
                 <option value="">Select branch</option>
                 {branches.map((branch) => (
@@ -133,7 +133,7 @@ function MemberInput({
     <div>
       <label
         htmlFor={id}
-        className="font-mono text-[11px] tracking-[0.15em] text-white/70 uppercase"
+        className="font-mono text-[13px] tracking-[0.15em] text-white/70 uppercase"
       >
         {label}
       </label>
@@ -145,7 +145,7 @@ function MemberInput({
         inputMode={type === "tel" ? "numeric" : undefined}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? `${id}-error` : undefined}
-        className="mt-1.5 block min-h-11 w-full rounded border border-white/15 bg-[#0a0c10] px-3 py-2.5 font-mono text-xs text-white placeholder:text-white/30 focus:border-cyan-300 focus:outline-none"
+        className="mt-1.5 block min-h-11 w-full rounded border border-white/15 bg-[#0a0c10] px-3 py-2.5 font-mono text-[13px] text-white placeholder:text-white/30 focus:border-cyan-300 focus:outline-none"
       />
       <FieldError id={`${id}-error`} message={error} />
     </div>
@@ -154,7 +154,7 @@ function MemberInput({
 
 function FieldError({ id, message }: { id: string; message?: string }) {
   return message ? (
-    <p id={id} className="mt-1 font-mono text-[11px] text-red-300" role="alert">
+    <p id={id} className="mt-1 font-mono text-[13px] text-red-300" role="alert">
       {message}
     </p>
   ) : null;
