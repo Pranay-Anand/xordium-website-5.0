@@ -9,8 +9,7 @@ export default function SiteFooter() {
             XORDIUM <span className="text-red-500">5.0</span>
           </p>
           <p className="mt-2 font-mono text-[11px] leading-relaxed text-white/50">
-            Flagship technology symbiosis // Birla Institute of Technology.
-            48 hours non-stop collegiate warfare.
+            Where cybernetic intellect confronts elite esports execution. A week of inter-collegiate competition, showcasing the pinnacle of collegiate esports and intellectual prowess.
           </p>
         </div>
         <div className="font-mono text-[11px] tracking-[0.2em] uppercase">

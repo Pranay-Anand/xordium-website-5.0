@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Countdown from "@/components/countdown";
 import EventCard from "@/components/event-card";
+import HomepageCarousel from "@/components/homepage-carousel";
 import SectionHeading from "@/components/section-heading";
 import { REGISTRATION_DEADLINE, getFeaturedEvents } from "@/lib/events";
 
@@ -10,24 +11,6 @@ const stats = [
   { value: "128+ TEAMS", label: "Collegiate varsity contenders" },
   { value: "96 HOURS", label: "Continuous tournament stream" },
   { value: "BIT CAMPUS", label: "Mesra // 550 acre complex" },
-];
-
-const logs = [
-  {
-    tag: "CRITICAL NOTICE",
-    title: "Valorant map rotation updated for BIT qualifiers",
-    body: "Tournament officials confirm Ascent returns to the active map pick rotation in Stage 2 playoffs. Teams must finalize coach communications prior to 09:00 IST.",
-  },
-  {
-    tag: "ROBOTICS YARD",
-    title: "Combat robotics battery storage depot opened",
-    body: "Lithium cells must be deposited at the armory before pit entry each morning. Free charging docks and telemetry probes are now accessible to checked-in teams.",
-  },
-  {
-    tag: "HACKATHON DESK",
-    title: "Hackathon cloud credits sent to registered leads",
-    body: "Squad leads confirm sponsored GPU allotments are distributed. Check spam folders or visit helproom Room 102.",
-  },
 ];
 
 const schedule = [
@@ -105,7 +88,7 @@ export default function Home() {
             ■ Birla Institute of Technology // Ignite x Esports // 2026 edition
           </p>
           <p className="mt-3 font-mono text-[11px] tracking-[0.3em] text-white/60 uppercase">
-            Flagship technology symbiosis • Premier national arena
+            Flagship technical events • Premier eSports arena
           </p>
           <h1 className="mt-2 font-display text-6xl leading-none font-black tracking-tight sm:text-8xl">
             XORDIUM <span className="text-red-600">5.0</span>
@@ -113,14 +96,13 @@ export default function Home() {
           <p className="font-display text-xl font-bold tracking-[0.4em] text-white/80">
             YEAR 2026
           </p>
-          <p className="mx-auto mt-4 max-w-2xl font-mono text-xs leading-relaxed text-white/60">
-            Where cybernetic intellect confronts elite physical esports
-            execution. 4 days of multi-tier collegiate warfare, AI benchmarks,
-            autonomous combat robotics, and high-voltage prize pools at BIT
-            Main Hub.
+          <p className="mx-auto mt-4 max-w-2xl font-mono text-sm leading-relaxed text-white/60 sm:text-base">
+            Where cybernetic intellect confronts elite esports
+            execution. A week of inter-collegiate competition, showcasing the
+            pinnacle of collegiate esports and intellectual prowess.
           </p>
           <div className="mx-auto mt-6 max-w-xl">
-            <Countdown target={REGISTRATION_DEADLINE} caption="Registration closes in" />
+            <Countdown target={REGISTRATION_DEADLINE} caption="Event commence in" />
           </div>
           <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
@@ -130,23 +112,13 @@ export default function Home() {
               Explore all events →
             </Link>
             <Link
-              href="/about"
+              href=""
               className="border border-white/25 px-6 py-3 font-mono text-xs tracking-[0.2em] uppercase hover:bg-white/10"
             >
               ↓ Official rulebook [PDF]
             </Link>
           </div>
           <div className="mx-auto mt-8 grid max-w-4xl grid-cols-2 gap-px overflow-hidden rounded border border-white/10 bg-white/10 sm:grid-cols-4">
-            {stats.map((s) => (
-              <div key={s.label} className="bg-[#101218] px-3 py-4">
-                <div className="font-display text-xl font-black text-white">
-                  {s.value}
-                </div>
-                <div className="mt-1 font-mono text-[10px] leading-snug text-white/50">
-                  {s.label}
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -165,53 +137,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BROADCAST LOGS */}
-      <section className="border-y border-white/10 bg-[#0d0f14]">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 lg:grid-cols-3">
-          <div>
-            <SectionHeading
-              kicker="Register dispatch log // Live feed"
-              title="Broadcast & operational logs"
-              blurb="Direct terminal broadcasts from the BIT organizing committee. Bracket shuffles and campus connectivity notices stream here with real-time timestamps."
-            />
-            <div className="rounded border border-white/10 bg-[#101218] p-4">
-              <p className="font-mono text-[10px] tracking-[0.25em] text-white/40 uppercase">
-                Network bandwidth utilization
-              </p>
-              <div className="mt-2 flex h-12 items-end gap-1">
-                {[35, 55, 40, 70, 52, 85, 64, 92, 58, 76, 48, 66].map((h, i) => (
-                  <div
-                    key={i}
-                    style={{ height: `${h}%` }}
-                    className="flex-1 bg-cyan-400/70"
-                  />
-                ))}
-              </div>
-              <p className="mt-2 font-mono text-[10px] text-white/40">
-                9.42 Gbps / 10 Gbps — packet drop 0.02%
-              </p>
-            </div>
-          </div>
-          <div className="space-y-4 lg:col-span-2">
-            {logs.map((l) => (
-              <article
-                key={l.title}
-                className="rounded border border-white/10 bg-[#101218] p-4"
-              >
-                <p className="font-mono text-[10px] tracking-[0.25em] text-red-500 uppercase">
-                  {l.tag}
-                </p>
-                <h3 className="mt-1 font-display text-lg font-extrabold tracking-wide uppercase">
-                  {l.title}
-                </h3>
-                <p className="mt-1 font-mono text-xs leading-relaxed text-white/55">
-                  {l.body}
-                </p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HomepageCarousel />
 
       {/* SCHEDULE */}
       <section className="mx-auto max-w-6xl px-4 py-14">
@@ -262,35 +188,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* DIRECTIVES */}
-      <section className="border-y border-white/10 bg-[#0d0f14]">
-        <div className="mx-auto max-w-6xl px-4 py-14">
-          <SectionHeading
-            kicker="Protocol clearance // Directives"
-            title="Operational directives"
-            blurb="All registered squads and attendees must abide by BIT campus security standards, fair-play bylaws, and peripheral safety rules."
-          />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {directives.map((d) => (
-              <div
-                key={d.n}
-                className="rounded border border-white/10 bg-[#101218] p-5"
-              >
-                <span className="bg-cyan-400 px-2 py-1 font-mono text-xs font-bold text-black">
-                  {d.n}
-                </span>
-                <h3 className="mt-3 font-display text-base font-extrabold uppercase">
-                  {d.title}
-                </h3>
-                <p className="mt-2 font-mono text-[11px] leading-relaxed text-white/55">
-                  {d.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* VENUE */}
       <section className="mx-auto grid max-w-6xl gap-8 px-4 py-14 lg:grid-cols-2">
         <div>
@@ -299,21 +196,13 @@ export default function Home() {
             title="Birla Institute of Technology"
           />
           <p className="font-mono text-xs leading-relaxed text-white/60">
-            Mesra • Ranchi campus. Accessible via direct airport transit and
-            chartered festival shuttle buses departing every 45 minutes during
-            festival days.
+            Patna Campus
           </p>
           <p className="mt-3 font-mono text-[11px] text-white/45">
-            Birla Institute of Technology, Mesra, Ranchi, Jharkhand 835215
+            Birla Institute of Technology, Patna, Bihar 800014
             <br />
-            operations@xordium.bit.in // logistics desk
+            ignite@bitmesra.ac.in
           </p>
-          <Link
-            href="/about"
-            className="mt-5 inline-block bg-red-600 px-5 py-2.5 font-mono text-[11px] font-bold tracking-[0.2em] uppercase hover:bg-red-500"
-          >
-            Download campus arena map ↓
-          </Link>
         </div>
         <div className="relative min-h-64 overflow-hidden rounded border border-white/10">
           <Image
@@ -324,7 +213,7 @@ export default function Home() {
             className="object-cover opacity-80"
           />
           <span className="absolute bottom-2 left-2 bg-black/70 px-2 py-1 font-mono text-[10px] tracking-[0.2em] text-cyan-300 uppercase">
-            Coordinates // 23°39′N 85°28′E
+            Coordinates - 25.59556, 85.08639
           </span>
         </div>
       </section>

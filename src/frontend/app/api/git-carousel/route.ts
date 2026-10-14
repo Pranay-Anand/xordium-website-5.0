@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { readdir, stat } from "node:fs/promises";
-import { join } from "node:path";
+import { extname, join } from "node:path";
 
 const CAROUSEL_SOURCE_DIR = join(process.cwd(), "src", "frontend", "carousel-source");
 const IMAGE_EXTENSIONS = new Set([
@@ -11,13 +11,13 @@ export async function GET() {
   try {
     const files = await readdir(CAROUSEL_SOURCE_DIR).catch(() => [] as string[]);
 
-    const images = await Promise.all(
+    const images = (await Promise.all(
       files.map(async (file) => {
         const filePath = join(CAROUSEL_SOURCE_DIR, file);
         const stats = await stat(filePath).catch(() => null);
         if (!stats) return null;
 
-        const ext = path.extname(file).toLowerCase();
+        const ext = extname(file).toLowerCase();
         if (!IMAGE_EXTENSIONS.has(ext)) return null;
 
         // Determine the best image source: WebP first, then original
@@ -32,7 +32,7 @@ export async function GET() {
           sourceName: file,
         };
       })
-    ).filter((img): img is NonNullable<typeof img> => img !== null);
+    )).filter((img): img is NonNullable<typeof img> => img !== null);
 
     return NextResponse.json(images);
   } catch (error) {

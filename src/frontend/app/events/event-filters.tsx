@@ -67,14 +67,14 @@ export default function EventFilters() {
           No protocols match your query. Clear search or contact support.
         </p>
       ) : (
-        <div className="mt-6 flex flex-col gap-8">
+        <div className="mt-6 flex flex-col gap-5">
           {filtered.map((e, i) => {
             // 1-indexed: odd events (1,3,5…) → description left, poster right
             //            even events (2,4,6…) → poster left, description right
             const posterOnLeft = (i + 1) % 2 === 0;
 
             const Poster = (
-              <div className="group relative h-[300px] w-full shrink-0 lg:h-full lg:w-1/2">
+              <div className="group relative h-40 w-full shrink-0 sm:h-44 lg:h-full lg:w-1/2">
                 <div className="relative h-full w-full overflow-hidden">
                   <Image
                     src={e.image}
@@ -108,7 +108,7 @@ export default function EventFilters() {
 
             const Info = (
               <div
-                className={`flex w-full flex-col justify-center bg-[#101218] p-8 lg:w-1/2 ${posterOnLeft ? "lg:pl-10" : "lg:pr-10"
+                className={`flex w-full flex-col justify-center bg-[#101218] p-4 sm:p-5 lg:w-1/2 ${posterOnLeft ? "lg:pl-6" : "lg:pr-6"
                   }`}
               >
                 {/* Index */}
@@ -117,15 +117,15 @@ export default function EventFilters() {
                   {String(filtered.length).padStart(2, "0")}
                 </p>
 
-                <h3 className="mt-2 font-display text-2xl font-black leading-tight uppercase sm:text-3xl">
+                <h3 className="mt-1.5 font-display text-lg font-black leading-tight uppercase sm:text-xl">
                   {e.title}
                 </h3>
 
-                <MarkdownText className="mt-3 font-mono text-xs leading-relaxed text-white/60">
+                <MarkdownText className="mt-2 font-mono text-[11px] leading-relaxed text-white/60 line-clamp-2">
                   {e.description}
                 </MarkdownText>
 
-                <dl className="mt-5 space-y-2 border-t border-white/10 pt-5 font-mono text-[11px]">
+                <dl className="mt-3 space-y-1 border-t border-white/10 pt-3 font-mono text-[10px]">
                   <div className="flex justify-between gap-4">
                     <dt className="text-white/40 uppercase">Venue</dt>
                     <dd className="text-right text-white/80">{e.venue}</dd>
@@ -146,12 +146,12 @@ export default function EventFilters() {
                   )}
                 </dl>
 
-                <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-5">
+                <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3">
                   <div>
                     <div className="font-mono text-[9px] tracking-[0.2em] text-white/40 uppercase">
                       Prize pool
                     </div>
-                    <div className="font-display text-2xl font-black text-red-500">
+                    <div className="font-display text-lg font-black text-red-500">
                       {e.prizePool}
                     </div>
                     {e.prizeNote && (
@@ -162,7 +162,7 @@ export default function EventFilters() {
                   </div>
                   <Link
                     href={getRegistrationHref(e.slug)}
-                    className="bg-red-600 px-5 py-2.5 font-mono text-[11px] font-bold tracking-[0.15em] text-white uppercase transition hover:bg-red-500"
+                    className="bg-red-600 px-4 py-2 font-mono text-[10px] font-bold tracking-[0.15em] text-white uppercase transition hover:bg-red-500"
                   >
                     {e.cta} →
                   </Link>
@@ -173,7 +173,7 @@ export default function EventFilters() {
             return (
               <div
                 key={e.slug}
-                className="flex flex-col overflow-hidden border border-white/10 lg:h-[500px] lg:flex-row lg:items-stretch"
+                className="flex flex-col overflow-hidden border border-white/10 lg:h-88 lg:flex-row lg:items-stretch"
               >
                 {posterOnLeft ? (
                   <>
