@@ -49,6 +49,12 @@ Thumbs.db
 .next/
 out/
 
+# Locally added carousel source images and generated previews
+# src/frontend/carousel-source/*  <- REMOVED: images will be tracked in git
+!src/frontend/carousel-source/.gitkeep
+src/frontend/public/assets/carousel/*
+!src/frontend/public/assets/carousel/.gitkeep
+
 # Test / coverage
 coverage/
 *.lcov
