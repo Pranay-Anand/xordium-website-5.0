@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Countdown from "@/components/countdown";
 import EventCard from "@/components/event-card";
-import HomepageCarousel from "@/components/homepage-carousel";
 import SectionHeading from "@/components/section-heading";
 import { REGISTRATION_DEADLINE, getFeaturedEvents } from "@/lib/events";
 
@@ -136,8 +135,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      <HomepageCarousel />
 
       {/* SCHEDULE */}
       <section className="mx-auto max-w-6xl px-4 py-14">

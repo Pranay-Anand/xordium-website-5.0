@@ -92,19 +92,6 @@ model Event {
   registrations Registration[]
 }
 
-model CarouselImage {
-  id                String   @id @default(uuid())
-  sourceName        String   @unique
-  sourceFingerprint String
-  imageData         Bytes
-  altText           String   @default("Xordium event photograph")
-  sortOrder         Int      @default(0)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  @@index([sortOrder])
-}
-
 model Registration {
   id        String   @id @default(uuid())
   email     String

@@ -14,7 +14,6 @@ import {
 const NAV_ITEMS = [
   { href: "/admin/dashboard", label: "Dashboard", minRole: "MODERATOR" as const },
   { href: "/admin/events", label: "Events", minRole: "MODERATOR" as const },
-  { href: "/admin/carousel", label: "Carousel", minRole: "OWNER" as const },
   { href: "/admin/registrations", label: "Registrations", minRole: "ADMIN" as const },
   { href: "/admin/event-registrations", label: "Event Regs", minRole: "ADMIN" as const },
   { href: "/admin/moderators", label: "Moderators", minRole: "ADMIN" as const },
