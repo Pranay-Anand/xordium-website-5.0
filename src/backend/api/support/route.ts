@@ -12,38 +12,31 @@ import {
 } from "@/backend/lib/api";
 import { checkRateLimit } from "@/backend/lib/rateLimit";
 
-// GET /api/support - list registrations (admin+)
+// GET /api/support - list support messages (admin+)
 export async function GET(request: Request) {
   const denied = await requireAdmin(request, true, "registrations:read");
   if (denied) return denied;
 
   try {
-    const registrations = await prisma.registration.findMany({
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        createdAt: true,
-        eventId: true,
-      },
+    const messages = await prisma.supportMessage.findMany({
       orderBy: { createdAt: "desc" },
       take: 200,
     });
 
-    return NextResponse.json(registrations);
+    return NextResponse.json(messages);
   } catch (error) {
-    return safeServerError("Failed to fetch registrations:", error);
+    return safeServerError("Failed to fetch support messages:", error);
   }
 }
 
-// POST /api/support - register for an event (public)
+// POST /api/support - submit support message (public)
 export async function POST(request: Request) {
   if (isCrossOriginRequest(request)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   try {
-    const limit = checkRateLimit(`register:${requestIdentifier(request)}`, 5, 60_000);
+    const limit = checkRateLimit(`support:${requestIdentifier(request)}`, 10, 60_000);
     if (!limit.success) {
       return NextResponse.json(
         { error: "Too many submissions. Please try again shortly." },
@@ -51,43 +44,36 @@ export async function POST(request: Request) {
       );
     }
 
-    const body = await readJsonObject(request, 4_096);
+    const body = await readJsonObject(request, 8_192);
+    const name = requiredText(body.name, "Name", 100);
     const email = requiredText(body.email, "Email", 254).toLowerCase();
-    const eventSlug = requiredText(body.eventSlug, "Event", 200);
+    const topic = requiredText(body.topic, "Topic", 50);
+    const game = optionalText(body.game, "Game", 50);
+    const message = requiredText(body.message, "Message", 5000);
 
     if (!email.includes("@")) {
       return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
     }
 
-    const event = await prisma.event.findUnique({
-      where: { slug: eventSlug },
-      select: { id: true },
-    });
-    if (!event) {
-      return NextResponse.json({ error: "Event not found." }, { status: 404 });
-    }
-
-    const existing = await prisma.registration.findFirst({
-      where: { eventId: event.id, email },
-    });
-    if (existing) {
-      return NextResponse.json(
-        { error: "You are already registered for this event." },
-        { status: 409 }
-      );
-    }
-
-    const name = optionalText(body.name, "Name", 100);
-
-    const registration = await prisma.registration.create({
-      data: { eventId: event.id, email, name },
-      select: { id: true, email: true, name: true, createdAt: true, eventId: true },
+    const supportMessage = await prisma.supportMessage.create({
+      data: { name, email, topic, game, message },
+      select: { id: true, email: true, name: true, topic: true, game: true, createdAt: true },
     });
 
-    return NextResponse.json(registration, { status: 201 });
+    // Generate a dispatch ID
+    const dispatchId = `XRD-${Date.now().toString(36).toUpperCase()}-${supportMessage.id.slice(0, 6).toUpperCase()}`;
+
+    return NextResponse.json(
+      { 
+        success: true, 
+        dispatchId,
+        notificationSent: false 
+      }, 
+      { status: 201 }
+    );
   } catch (error) {
     const inputResponse = inputErrorResponse(error);
     if (inputResponse) return inputResponse;
-    return safeServerError("Failed to process registration:", error);
+    return safeServerError("Failed to process support message:", error);
   }
 }

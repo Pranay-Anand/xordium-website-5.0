@@ -425,10 +425,7 @@ export default function RegistrationForm({ initialEventId }: Props) {
                 Our team is not from Birla Institute of Technology (BIT)
               </span>
               <span className="mt-1 block text-white/50">
-                Inter-college / open team? Tick this and the{" "}
-                <span className="text-cyan-300">{BIT_EMAIL_DOMAIN}</span> email
-                requirement is waived for your whole team. BIT teams must leave
-                this unchecked and use {BIT_EMAIL_DOMAIN} emails.
+                BIT teams must use {BIT_EMAIL_DOMAIN} emails.
               </span>
             </span>
           </label>
