@@ -435,9 +435,19 @@ export default function EventsPage() {
                 </div>
               </div>
 
+              {(event.posterUrl || event.image) && (
+                <div className="mb-3">
+                  <img
+                    src={event.posterUrl || event.image}
+                    alt={event.title}
+                    className="w-full h-48 object-contain rounded border border-white/10 bg-white/5"
+                  />
+                </div>
+              )}
+
               {event.description && (
-                <p className="font-mono text-[11px] text-white/60 line-clamp-2 mb-3">
-                  {stripMarkdown(event.description).slice(0, 150)}...
+                <p className="font-mono text-[11px] text-white/60 line-clamp-4 mb-3">
+                  {stripMarkdown(event.description).slice(0, 300)}...
                 </p>
               )}
 
