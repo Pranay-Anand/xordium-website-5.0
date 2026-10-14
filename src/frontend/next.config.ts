@@ -28,15 +28,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  // Rewrite carousel image requests to serve from source folder
-  async rewrites() {
-    return [
-      {
-        source: "/carousel/:file*",
-        destination: "/src/frontend/carousel-source/:file*",
-      },
-    ];
-  },
 };
 
 export default nextConfig;
