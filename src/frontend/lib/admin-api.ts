@@ -15,6 +15,7 @@ export interface AdminUser {
   rollNo?: string | null;
   name: string | null;
   role: "OWNER" | "ADMIN" | "MODERATOR";
+  isActive: boolean;
   createdAt?: string;
 }
 
@@ -166,6 +167,39 @@ export async function fetchUsers(): Promise<AdminUser[]> {
   return apiRequest<AdminUser[]>("/admin/users");
 }
 
+export async function updateUser(
+  userId: string,
+  input: { role?: "ADMIN" | "MODERATOR"; isActive?: boolean }
+): Promise<AdminUser> {
+  return apiRequest<AdminUser>(`/admin/users/${userId}`, {
+    method: "PUT",
+    body: JSON.stringify(input),
+  });
+}
+
+export async function deleteUser(userId: string): Promise<{ message: string }> {
+  return apiRequest<{ message: string }>(`/admin/users/${userId}`, {
+    method: "DELETE",
+  });
+}
+
+// ==================== SUPPORT API (Admin) ====================
+
+export interface SupportMessage {
+  id: string;
+  name: string;
+  email: string;
+  topic: string;
+  game: string | null;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function fetchSupportMessages(): Promise<SupportMessage[]> {
+  return apiRequest<SupportMessage[]>("/admin/support");
+}
+
 // ==================== INVITATIONS API (creates accounts via email) ====================
 
 export async function fetchInvitations(): Promise<Invitation[]> {
@@ -252,6 +286,19 @@ export async function updateEvent(
   return apiRequest<AdminEvent>(`/moderator/events/${slug}`, {
     method: "PUT",
     body: JSON.stringify(input),
+  });
+}
+
+// ==================== ADMIN EVENTS API (Owner only) ====================
+
+export async function fetchAdminEvents(): Promise<AdminEvent[]> {
+  return apiRequest<AdminEvent[]>("/api/admin/events");
+}
+
+export async function deleteEvent(slug: string): Promise<{ message: string }> {
+  return apiRequest<{ message: string }>("/api/admin/events", {
+    method: "DELETE",
+    body: JSON.stringify({ slug }),
   });
 }
 

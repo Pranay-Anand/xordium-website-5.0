@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { href: "/admin/event-registrations", label: "Event Regs", minRole: "ADMIN" as const },
   { href: "/admin/moderators", label: "Moderators", minRole: "ADMIN" as const },
   { href: "/admin/users", label: "Users", minRole: "OWNER" as const },
+  { href: "/admin/support", label: "Support", minRole: "MODERATOR" as const },
 ];
 
 const ROLE_LEVELS: Record<AdminUser["role"], number> = {

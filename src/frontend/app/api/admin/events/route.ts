@@ -1,0 +1,1 @@
+export { GET, DELETE } from "@/backend/api/admin/events/route";

@@ -4,15 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
   getCurrentUser,
-  fetchEvents,
+  fetchAdminEvents,
   updateEvent,
+  deleteEvent,
   type AdminEvent,
 } from "@/lib/admin-api";
 import { stripMarkdown } from "@/lib/markdown";
 
-// ── WebP conversion via Canvas (client-side, no server deps) ────────────────
-function convertToWebP(file: File): Promise<Blob> {
-  return new Promise((resolve, reject) => {
+// WebP conversion via Canvas (client-side, no server deps)
+const convertToWebP = (file: File): Promise<Blob> =>
+{
+  return new Promise((resolve, reject) =>
+  {
     const url = URL.createObjectURL(file);
     const img = document.createElement("img");
 
@@ -44,9 +47,9 @@ function convertToWebP(file: File): Promise<Blob> {
 
     img.src = url;
   });
-}
+};
 
-// ── Upload WebP blob to the poster endpoint ──────────────────────────────────
+// Upload WebP blob to the poster endpoint
 async function uploadPoster(slug: string, webpBlob: Blob): Promise<string> {
   const form = new FormData();
   form.append("file", webpBlob, `${slug}.webp`);
@@ -62,7 +65,7 @@ async function uploadPoster(slug: string, webpBlob: Blob): Promise<string> {
   return data.path as string;
 }
 
-// ── Component ────────────────────────────────────────────────────────────────
+// Component
 export default function EventsPage() {
   const user = getCurrentUser();
   const [events, setEvents] = useState<AdminEvent[]>([]);
@@ -72,6 +75,8 @@ export default function EventsPage() {
   const [editingEvent, setEditingEvent] = useState<AdminEvent | null>(null);
   const [editDescription, setEditDescription] = useState("");
   const [editPosterUrl, setEditPosterUrl] = useState("");
+  const [deletingEvent, setDeletingEvent] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   // Image upload state
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -80,6 +85,7 @@ export default function EventsPage() {
   const [converting, setConverting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     loadEvents();
@@ -87,7 +93,7 @@ export default function EventsPage() {
 
   async function loadEvents() {
     try {
-      const data = await fetchEvents();
+      const data = await fetchAdminEvents();
       setEvents(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load events");
@@ -140,7 +146,7 @@ export default function EventsPage() {
       const path = await uploadPoster(editingEvent.slug, pendingBlob);
       setEditPosterUrl(path);
       setPendingBlob(null);
-      setSuccess("Poster uploaded — click Save to apply.");
+      setSuccess("Poster uploaded - click Save to apply.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed.");
     } finally {
@@ -157,7 +163,6 @@ export default function EventsPage() {
     setSuccess("");
 
     try {
-      // If there's a pending blob that hasn't been uploaded yet, upload first
       let posterUrl = editPosterUrl;
       if (pendingBlob) {
         posterUrl = await uploadPoster(editingEvent.slug, pendingBlob);
@@ -179,6 +184,30 @@ export default function EventsPage() {
     }
   }
 
+  async function handleDelete(slug: string) {
+    setDeleting(true);
+    setError("");
+    try {
+      await deleteEvent(slug);
+      setSuccess("Event deleted successfully.");
+      loadEvents();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete event.");
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  async function handleDeleteConfirm(slug: string) {
+    if (deleteConfirm !== slug) {
+      setDeleteConfirm(slug);
+      setTimeout(() => setDeleteConfirm(null), 3000);
+      return;
+    }
+    await handleDelete(slug);
+    setDeleteConfirm(null);
+  }
+
   if (!user) return null;
 
   return (
@@ -189,7 +218,7 @@ export default function EventsPage() {
           // EVENTS
         </h1>
         <p className="mt-2 font-mono text-[11px] text-white/40 uppercase tracking-[0.2em]">
-          Manage event descriptions and posters
+          Manage event descriptions, posters, and featured status
         </p>
       </div>
 
@@ -205,10 +234,10 @@ export default function EventsPage() {
         </div>
       )}
 
-      {/* ── Edit Modal ── */}
+      {/* Edit Modal */}
       {editingEvent && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center z-50 p-4">
-          <div className="border border-white/20 bg-[#0a0c10] rounded max-w-2xl w-full max-h-[92vh] overflow-y-auto">
+          <div className="border border-white/20 bg-[var(--color-dracula-bg)] rounded max-w-2xl w-full max-h-[92vh] overflow-y-auto">
             {/* Modal header */}
             <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
               <div>
@@ -241,8 +270,7 @@ export default function EventsPage() {
                   placeholder="Event description (Markdown supported)..."
                 />
                 <p className="mt-1.5 font-mono text-[10px] leading-relaxed text-white/35">
-                  Markdown supported — **bold**, *italic*, - lists, &gt; quotes,
-                  [links](https://…). Line breaks &amp; emoji are preserved as typed.
+                  Markdown supported - **bold**, *italic*, - lists, &gt;   quotes,
                 </p>
               </div>
 
@@ -251,7 +279,7 @@ export default function EventsPage() {
                 <label className="block font-mono text-[11px] tracking-[0.2em] text-white/60 uppercase mb-1.5">
                   Poster Image
                   <span className="ml-2 text-white/30 normal-case tracking-normal">
-                    (portrait 1080×1350 — any format, saved as WebP)
+                    (portrait 1080x1350 - any format, saved as WebP)
                   </span>
                 </label>
 
@@ -269,7 +297,7 @@ export default function EventsPage() {
                   />
                   {converting ? (
                     <p className="font-mono text-xs text-white/50">
-                      Converting to WebP…
+                      Converting to WebP...
                     </p>
                   ) : previewSrc ? (
                     <>
@@ -283,7 +311,7 @@ export default function EventsPage() {
                         />
                       </div>
                       <p className="font-mono text-[10px] text-green-400">
-                        ✓ Converted to WebP — ready to save
+                        Converted to WebP - ready to save
                       </p>
                       <p className="font-mono text-[10px] text-white/40">
                         Click to replace
@@ -309,10 +337,9 @@ export default function EventsPage() {
                           Click to select a poster image
                         </p>
                         <p className="font-mono text-[10px] text-white/35 mt-1">
-                          JPEG · PNG · WebP · AVIF · up to 10 MB
+                          JPEG - PNG - WebP - AVIF - up to 10 MB
                         </p>
                       </div>
-                      {/* Show existing poster if available */}
                       {(editPosterUrl) && (
                         <p className="font-mono text-[10px] text-cyan-400">
                           Current: {editPosterUrl.split("/").pop()}
@@ -334,7 +361,7 @@ export default function EventsPage() {
                 )}
                 {uploading && (
                   <p className="mt-2 font-mono text-[11px] text-white/50">
-                    Uploading…
+                    Uploading...
                   </p>
                 )}
               </div>
@@ -346,7 +373,7 @@ export default function EventsPage() {
                   disabled={saving || uploading || converting}
                   className="bg-red-600 px-6 py-2.5 font-mono text-[11px] font-bold tracking-[0.2em] text-white uppercase hover:bg-red-500 disabled:opacity-50 transition-colors"
                 >
-                  {saving ? "SAVING…" : "SAVE CHANGES →"}
+                  {saving ? "SAVING..." : "SAVE CHANGES >"}
                 </button>
                 <button
                   type="button"
@@ -361,7 +388,7 @@ export default function EventsPage() {
         </div>
       )}
 
-      {/* ── Events grid ── */}
+      {/* Events grid */}
       {loading ? (
         <div className="grid md:grid-cols-2 gap-4">
           {[1, 2, 3, 4].map((i) => (
@@ -388,7 +415,7 @@ export default function EventsPage() {
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <p className="font-mono text-[10px] text-red-400 uppercase tracking-[0.15em]">
-                    {event.tag}
+                    {event.featured ? " " : ""}{event.tag}
                   </p>
                   <h3 className="font-mono text-sm font-bold text-white mt-1">
                     {event.title}
@@ -396,13 +423,13 @@ export default function EventsPage() {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   {event.featured && (
-                    <span className="bg-red-600/20 text-red-400 border border-red-500/50 px-2 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.15em] rounded">
+                    <span className="bg-yellow-600/20 text-yellow-400 border border-yellow-500/50 px-2 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.15em] rounded">
                       Featured
                     </span>
                   )}
                   {(event.posterUrl || event.image) && (
                     <span className="bg-green-600/20 text-green-400 border border-green-500/50 px-2 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.15em] rounded">
-                      Poster ✓
+                      Poster
                     </span>
                   )}
                 </div>
@@ -410,7 +437,7 @@ export default function EventsPage() {
 
               {event.description && (
                 <p className="font-mono text-[11px] text-white/60 line-clamp-2 mb-3">
-                  {stripMarkdown(event.description).slice(0, 150)}…
+                  {stripMarkdown(event.description).slice(0, 150)}...
                 </p>
               )}
 
@@ -418,12 +445,31 @@ export default function EventsPage() {
                 <p className="font-mono text-[10px] text-white/40">
                   {event.category}
                 </p>
-                <button
-                  onClick={() => startEditing(event)}
-                  className="bg-white/10 border border-white/20 px-3 py-1.5 font-mono text-[10px] font-bold text-white uppercase tracking-[0.15em] hover:bg-white/20 transition-colors"
-                >
-                  Edit →
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => startEditing(event)}
+                    className="bg-white/10 border border-white/20 px-3 py-1.5 font-mono text-[10px] font-bold text-white uppercase tracking-[0.15em] hover:bg-white/20 transition-colors"
+                  >
+                    Edit
+                  </button>
+                  {user?.role === "OWNER" && (
+                    <button
+                      onClick={() => handleDeleteConfirm(event.slug)}
+                      disabled={deleting}
+                      className={`bg-white/10 border px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.15em] transition-colors ${
+                        deleteConfirm === event.slug
+                          ? "bg-red-600 border-red-500 text-white"
+                          : "border-white/20 text-white/60 hover:bg-red-600/20 hover:border-red-500 hover:text-red-400"
+                      }`}
+                    >
+                      {deleteConfirm === event.slug
+                        ? deleting
+                          ? "DELETING..."
+                          : "CONFIRM DELETE"
+                        : "Delete"}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -433,16 +479,13 @@ export default function EventsPage() {
       {/* Info box */}
       <div className="mt-8 border border-white/10 bg-white/5 p-4 rounded">
         <h4 className="font-mono text-[11px] text-white/60 uppercase tracking-[0.15em] mb-2">
-          Moderator Capabilities
+          Owner Capabilities
         </h4>
         <ul className="space-y-1">
-          <li className="font-mono text-[11px] text-white/40">✓ Edit event descriptions</li>
-          <li className="font-mono text-[11px] text-white/40">
-            ✓ Upload poster images (auto-converted to WebP, portrait 1080×1350)
-          </li>
-          <li className="font-mono text-[11px] text-white/40">✓ View all featured events</li>
-          <li className="font-mono text-[11px] text-white/40">✗ Cannot create or delete events</li>
-          <li className="font-mono text-[11px] text-white/40">✗ Cannot manage users or roles</li>
+          <li className="font-mono text-[11px] text-white/40">Edit event descriptions & posters</li>
+          <li className="font-mono text-[11px] text-white/40">Delete events</li>
+          <li className="font-mono text-[11px] text-white/40">Featured events shown first, then sorted by date</li>
+          <li className="font-mono text-[11px] text-white/40">Upload poster images (auto-converted to WebP, portrait 1080x1350)</li>
         </ul>
       </div>
     </div>

@@ -6,6 +6,8 @@ import {
   fetchUsers,
   fetchInvitations,
   sendInvitation,
+  updateUser,
+  deleteUser,
   type AdminUser,
   type Invitation,
 } from "@/lib/admin-api";
@@ -20,6 +22,10 @@ export default function UsersPage() {
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [lastInviteUrl, setLastInviteUrl] = useState("");
   const [copied, setCopied] = useState(false);
+  const [editingUserId, setEditingUserId] = useState<string | null>(null);
+  const [editRole, setEditRole] = useState<"ADMIN" | "MODERATOR">("MODERATOR");
+  const [editIsActive, setEditIsActive] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   // Invitation form state — only email + role; the invitee sets the rest.
   const [newEmail, setNewEmail] = useState("");
@@ -80,6 +86,58 @@ export default function UsersPage() {
       setCopied(true);
     } catch {
       setCopied(false);
+    }
+  }
+
+  async function startEditing(user: AdminUser) {
+    setEditingUserId(user.id);
+    setEditRole(user.role as "ADMIN" | "MODERATOR");
+    setEditIsActive(user.isActive);
+    setError("");
+    setSuccess("");
+  }
+
+  function cancelEditing() {
+    setEditingUserId(null);
+    setEditRole("MODERATOR");
+    setEditIsActive(true);
+    setError("");
+    setSuccess("");
+  }
+
+  async function handleUpdateUser(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editingUserId) return;
+    setSaving(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const updated = await updateUser(editingUserId, {
+        role: editRole,
+        isActive: editIsActive,
+      });
+      setSuccess(`User ${updated.email} updated successfully.`);
+      setEditingUserId(null);
+      loadData();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update user.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleDeleteUser(userId: string, email: string) {
+    if (!confirm(`Are you sure you want to delete user ${email}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      await deleteUser(userId);
+      setSuccess(`User ${email} deleted successfully.`);
+      loadData();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete user.");
     }
   }
 
@@ -238,41 +296,124 @@ export default function UsersPage() {
                   Role
                 </th>
                 <th className="px-4 py-3 text-left font-mono text-[10px] text-white/50 uppercase tracking-[0.2em]">
+                  Status
+                </th>
+                <th className="px-4 py-3 text-left font-mono text-[10px] text-white/50 uppercase tracking-[0.2em]">
                   Created
+                </th>
+                <th className="px-4 py-3 text-left font-mono text-[10px] text-white/50 uppercase tracking-[0.2em]">
+                  Actions
                 </th>
               </tr>
             </thead>
             <tbody>
-              {users.map((u) => (
-                <tr key={u.id} className="border-b border-white/5 hover:bg-white/5">
-                  <td className="px-4 py-3 font-mono text-xs text-white">{u.email}</td>
-                  <td className="px-4 py-3 font-mono text-xs text-white/80">
-                    {u.username || "—"}
-                  </td>
-                  <td className="px-4 py-3 font-mono text-[11px] text-white/60">
-                    {u.rollNo || "—"}
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs text-white/80">
-                    {u.name || "—"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`inline-block px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.15em] rounded ${
-                        u.role === "OWNER"
-                          ? "bg-red-600/20 text-red-400 border border-red-500/50"
-                          : u.role === "ADMIN"
-                          ? "bg-blue-600/20 text-blue-400 border border-blue-500/50"
-                          : "bg-white/10 text-white/60 border border-white/20"
-                      }`}
-                    >
-                      {u.role}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 font-mono text-[10px] text-white/40">
-                    {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "—"}
-                  </td>
-                </tr>
-              ))}
+              {users.map((u) => {
+                const isEditing = editingUserId === u.id;
+                return (
+                  <tr key={u.id} className="border-b border-white/5 hover:bg-white/5">
+                    <td className="px-4 py-3 font-mono text-xs text-white">{u.email}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-white/80">
+                      {u.username || "—"}
+                    </td>
+                    <td className="px-4 py-3 font-mono text-[11px] text-white/60">
+                      {u.rollNo || "—"}
+                    </td>
+                    <td className="px-4 py-3 font-mono text-xs text-white/80">
+                      {u.name || "—"}
+                    </td>
+                    <td className="px-4 py-3">
+                      {isEditing ? (
+                        <select
+                          value={editRole}
+                          onChange={(e) => setEditRole(e.target.value as "ADMIN" | "MODERATOR")}
+                          className="block w-full rounded border border-white/20 bg-white/5 p-1.5 text-white text-xs font-mono focus:border-red-500 focus:outline-none"
+                        >
+                          <option value="MODERATOR">Moderator</option>
+                          <option value="ADMIN">Admin</option>
+                        </select>
+                      ) : (
+                        <span
+                          className={`inline-block px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.15em] rounded ${
+                            u.role === "OWNER"
+                              ? "bg-red-600/20 text-red-400 border border-red-500/50"
+                              : u.role === "ADMIN"
+                              ? "bg-blue-600/20 text-blue-400 border border-blue-500/50"
+                              : "bg-white/10 text-white/60 border border-white/20"
+                          }`}
+                        >
+                          {u.role}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      {isEditing ? (
+                        <label className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            checked={editIsActive}
+                            onChange={(e) => setEditIsActive(e.target.checked)}
+                            className="size-4 accent-red-500"
+                          />
+                          <span className="font-mono text-xs text-white/70">Active</span>
+                        </label>
+                      ) : (
+                        <span
+                          className={`inline-block px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.15em] rounded ${
+                            u.isActive
+                              ? "bg-green-600/20 text-green-400 border border-green-500/50"
+                              : "bg-red-600/20 text-red-400 border border-red-500/50"
+                          }`}
+                        >
+                          {u.isActive ? "Active" : "Inactive"}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 font-mono text-[10px] text-white/40">
+                      {u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "—"}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        {isEditing ? (
+                          <>
+                            <button
+                              type="button"
+                              onClick={handleUpdateUser}
+                              disabled={saving}
+                              className="bg-green-600 px-3 py-1.5 font-mono text-[10px] font-bold tracking-[0.15em] text-white uppercase hover:bg-green-500 disabled:opacity-50 transition-colors"
+                            >
+                              {saving ? "SAVING…" : "SAVE"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={cancelEditing}
+                              className="border border-white/20 bg-white/5 px-3 py-1.5 font-mono text-[10px] font-bold tracking-[0.15em] text-white/60 uppercase hover:bg-white/10 hover:text-white transition-colors"
+                            >
+                              CANCEL
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => startEditing(u)}
+                              className="bg-white/10 border border-white/20 px-3 py-1.5 font-mono text-[10px] font-bold tracking-[0.15em] text-white/60 uppercase hover:bg-white/20 hover:text-white transition-colors"
+                            >
+                              Edit
+                            </button>
+                            {u.role !== "OWNER" && (
+                              <button
+                                onClick={() => handleDeleteUser(u.id, u.email)}
+                                className="bg-red-600/20 border border-red-500/50 px-3 py-1.5 font-mono text-[10px] font-bold tracking-[0.15em] text-red-400 uppercase hover:bg-red-600/30 transition-colors"
+                              >
+                                Delete
+                              </button>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
